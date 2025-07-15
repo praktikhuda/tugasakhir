@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Mail\KirimOtp;
+use App\Models\Pelanggan;
+use App\Models\SendOtp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
@@ -18,64 +24,200 @@ class AuthController extends Controller
 
     public function index()
     {
-        return view('login');
+        return view('landing-page/login');
+    }
+    public function daftar()
+    {
+        return view('landing-page/daftar');
+    }
+
+    public function register(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'username'      => 'required',
+            'email'      => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status'    => 'error',
+                'errors'     => $validator->errors(),
+                'toast'     => 'harus diisi semua'
+            ]);
+        }
+
+        $email = anti_injeksi($request->email);
+        $username = anti_injeksi($request->username);
+
+        $user = DB::table('pelanggan')->where('email', $email)->first();
+        $username_ = DB::table('users')->where('user', $username)->first();
+
+        if ($user) {
+            return response()->json([
+                'status'    => 'error',
+                'toast'     => 'email sudah terdaftar'
+            ]);
+        }
+
+        if ($username_) {
+            return response()->json([
+                'status'    => 'error',
+                'toast'     => 'username sudah ada yang menggunakan'
+            ]);
+        }
+
+        $count = DB::table('send_otp')->where('email', $email)->count();
+
+        if ($count > 3) {
+            return response()->json([
+                'status' => 'error',
+                'toast'  => 'email sudah melakukan beberapa kali verifikasi'
+            ]);
+        }
+
+        $kode = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        $post = SendOtp::create([
+            'email'       => $email,
+            'kode'        => $kode,
+            'created_at'   => now(),
+            'updated_at'   => now(),
+        ]);
+
+        Mail::to($email)->send(new KirimOtp($post));
+
+        return response()->json([
+            'status'    => 'success',
+            'toast'     => 'otp berhasil ke kirim, mohon cek email'
+        ]);
+    }
+
+    public function send_otp(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email'      => 'required',
+            'password'      => 'required',
+            'otp'      => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status'    => 'error',
+                'errors'     => $validator->errors(),
+                'toast'     => 'harus diisi semua'
+            ]);
+        }
+
+        $email = anti_injeksi($request->email);
+        $pass = anti_injeksi($request->password);
+        $otp = anti_injeksi($request->otp);
+
+        $otp = DB::table('send_otp')->where('email', $email)->where('kode', $otp)->first();
+
+        if (!$otp) {
+            return response()->json([
+                'status'    => 'error',
+                'toast'     => 'otp salah'
+            ]);
+        }
+
+        DB::table('send_otp')->where('id', $otp->id)->delete();
+
+        // Simpan ke tabel `pelanggan`
+        $pelanggan = Pelanggan::create([
+            'nama' => '',
+            'email' => $email,
+            'alamat' => '',
+            'nomor' => '',
+            'created_at'   => now(),
+            'updated_at'   => now(),
+        ]);
+
+        // Simpan ke tabel `users`
+        User::create([
+            'user' => '',
+            'pass'     => Hash::make($pass),
+            'role' => 'pelanggan',
+            'id_pelanggan' => $pelanggan->id,
+            'id_karyawan' => 0,
+            'created_at'   => now(),
+            'updated_at'   => now(),
+        ]);
+
+        return response()->json([
+            'status'    => 'success',
+            'toast'     => 'pendaftaran berhasil'
+        ]);
     }
 
     public function authenticate(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'      => 'required',
+            'username'      => 'required',
             'password'      => 'required'
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'status'    => 'error',
-                'errors'     => $validator->errors()
+                'errors'     => $validator->errors(),
+                'toast'     => 'harus diisi semua'
             ]);
         }
 
-        $user = DB::table('users')
-            ->where('name', $request->name)
-            ->first();
+        $username = anti_injeksi($request->username);
+        $pass = anti_injeksi($request->password);
+
+        $isEmail = filter_var($username, FILTER_VALIDATE_EMAIL);
+
+
+        if ($isEmail) {
+            $pelanggan = DB::table('pelanggan')->where('email', $username)->first();
+    
+            if ($pelanggan) {
+                $user = DB::table('users')->where('id_pelanggan', $pelanggan->id)->first();
+            } else {
+                $karyawan = DB::table('karyawan')->where('email', $username)->first();
+    
+                if ($karyawan) {
+                    $user = DB::table('users')->where('id_karyawan', $karyawan->id)->first();
+                } else {
+                    return response()->json([
+                        'status' => 'error',
+                        'toast'  => 'username tidak di temukan',
+                    ]);
+                }
+            }        
+        } else {
+            $user = DB::table('users')->where('user', $username)->first();
+        }
+
         if (!$user) {
             return response()->json([
-                'status'    => 'error',
-                'toast'     => 'name atau password salah!',
-                'resets'    => 'all'
+                'status' => 'error',
+                'toast'  => 'akun pengguna tidak ditemukan!'
             ]);
         }
 
-        $credentials = [
-            'name'      => $request->name,
-            'password'      => $request->password
-        ];
 
-        if (Auth::attempt($credentials)) {
-
-            $request->session()->regenerate();
-
-            $session = [
-                'name'      => $request->name,
-            ];
-
-            Session::put($session);
+        if (!Hash::check($pass, $user->pass)) {
             return response()->json([
-                'status'    => 'success',
-                'toast'     => 'Login berhasil',
-                'redirect'  => route('dashboard')
-            ]);
-        } else {
-            return response()->json([
-                'status'    => 'error',
-                'toast'     => 'name atau password salah!',
-                'resets'    => 'all'
+                'status' => 'error',
+                'toast'  => 'Password salah!'
             ]);
         }
+
+        $request->session()->regenerate();
+
+        Session::put([
+            'username'    => $username,
+            'role' => $user->role
+        ]);
+
 
         return response()->json([
-            'status'    => 'error',
-            'toast'     => 'Login gagal, silahkan tunggu beberapa saat lagi atau hubungi administrator'
+            'status' => 'success',
+            'toast'  => 'login berhasil'
         ]);
     }
 
@@ -87,6 +229,6 @@ class AuthController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect(route('auth.login'));
+        return redirect(route('auth.masuk'));
     }
 }

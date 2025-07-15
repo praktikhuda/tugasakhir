@@ -1,4 +1,4 @@
-<div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center w-full h-full bg-black/50">
+<div id="crud-modal" tabindex="-1" aria-hidden="true" class="fixed inset-0 z-50 flex items-center justify-center w-full h-full bg-black/50">
     <div class="relative p-4 w-full max-w-md max-h-full">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow-sm">
@@ -30,3 +30,9 @@
         </div>
     </div>
 </div>
+
+<script>
+    $("#tutupModal").on("click", function () {  
+        $("#crud-modal").addClass('hidden');
+    })
+</script>

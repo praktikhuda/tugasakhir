@@ -19,7 +19,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/img/apple-icon.png') }}" />
     <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon.png') }}" />
     <title>Soft UI Dashboard Tailwind</title>
@@ -34,12 +34,21 @@
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <!-- Main Styling -->
     <link href="{{ asset('assets/css/soft-ui-dashboard-tailwind.css?v=1.0.5') }}" rel="stylesheet" />
-    <!-- Nepcha Analytics (nepcha.com) -->
-    <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
-    <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        body {
+            font-family: "Poppins", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+    </style>
 </head>
 
-<body class="m-0 font-sans text-base antialiased font-normal leading-default bg-gray-50 text-slate-500">
+<body class="m-0 text-base antialiased font-normal leading-default bg-gray-50 text-slate-500">
     <!-- sidenav  -->
     @include('layouts.sidebar')
     <!-- end sidenav -->
@@ -122,5 +131,9 @@
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <!-- main script file  -->
 <script src="{{ asset('assets/js/soft-ui-dashboard-tailwind.js?v=1.0.5') }}" async></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+@yield('js')
 
 </html>

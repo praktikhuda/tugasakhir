@@ -6,18 +6,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="apple-touch-icon" sizes="76x76" href="https://cdn.rareblocks.xyz/collection/celebration/images/logo.svg" />
-    <link rel="icon" type="image/png" href="https://cdn.rareblocks.xyz/collection/celebration/images/logo.svg" />
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ ('assets/img/kooler.png') }}" />
+    <link rel="icon" type="image/png" href="{{ ('assets/img/kooler.png') }}" />
+
     <title>Servis & Pemasangan AC Profesional</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" /> -->
     <script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/fullcalendar/main.min.css') }}">
+
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        body {
+            font-family: "Poppins", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
         .required::after {
             content: " *";
             color: rgb(211, 3, 3);
             font-weight: bold;
+        }
+
+        .fc-day:hover {
+            cursor: pointer !important;
+        }
+
+        #landing-page {
+            background-image: url('/assets/img/bg.png');
         }
     </style>
 </head>
@@ -29,6 +57,14 @@
 
     @include('landing-page.layouts.footer')
 </body>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="{{ asset('assets/fullcalendar/main.js') }}"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- <script src="{{ asset('assets/fullcalendar/moment.js') }}"></script> -->
+<!-- <script src="{{ asset('assets/fullcalendar/moment.min.js') }}"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script> -->
+@yield('js')
 <script>
     let isScrolled = false;
     $(window).on("scroll", function() {
@@ -36,13 +72,13 @@
             if (!isScrolled) {
                 isScrolled = true;
                 $("#header-menu").addClass("shadow-lg");
-                $("#nav-padding").removeClass("py-4").addClass("py-2");
+                $("#nav-padding").removeClass("py-3").addClass("py-2");
             }
         } else {
             if (isScrolled) {
                 isScrolled = false;
                 $("#header-menu").removeClass("shadow-lg");
-                $("#nav-padding").removeClass("py-2").addClass("py-4");
+                $("#nav-padding").removeClass("py-2").addClass("py-3");
             }
         }
     });

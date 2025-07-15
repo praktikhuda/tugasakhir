@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\User;
+
+use App\Mail\KirimPesan;
+use App\Models\Pelanggan;
+use Illuminate\Support\Str;
+
 use Illuminate\Http\Request;
 use App\Models\PesanSekarang;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
-use Illuminate\Support\Facades\Validator;
-
-use App\Mail\KirimPesan;
 use Illuminate\Support\Facades\Mail;
-
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 
 class PesanSekarangController extends Controller
 {
@@ -30,22 +33,17 @@ class PesanSekarangController extends Controller
     {
         // Validasi input
         $messages = [
-            'namalengkap.required' => 'Nama lengkap wajib diisi.',
-            'email.required'       => 'Email wajib diisi.',
-            'email.email'          => 'Format email tidak valid.',
-            'nomer.required'       => 'Nomor telepon wajib diisi.',
+            'kontak.required'       => 'Nomor kontak wajib diisi.',
             'tanggal.required'     => 'Tanggal wajib diisi.',
             'tanggal.date'         => 'Format tanggal tidak valid.',
-            'layanan.required'     => 'Layanan wajib dipilih.',
+            'id_layanan.required'     => 'Layanan wajib dipilih.',
         ];
 
         $validator = Validator::make($request->all(), [
-            'namalengkap' => 'required|string|max:255',
-            'email'       => 'required|email|max:255',
-            'nomer'       => 'required|string|max:20',
-            'alamat'      => 'required|string|max:255',
+            'kontak'       => 'required|string|max:20',
+            'lokasi'      => 'required|string|max:255',
             'tanggal'     => 'required|date',
-            'layanan'     => 'required|string|max:100',
+            'id_layanan'     => 'required|string|max:100',
             'catatan'     => 'nullable|string',
         ], $messages);
         
@@ -55,42 +53,82 @@ class PesanSekarangController extends Controller
             $existing = PesanSekarang::where('tanggal', $tanggal)->exists();
 
             if ($existing) {
-                $validator->errors()->add('tanggal', 'Tanggal yang dipilih sudah penuh.');
+                return response()->json([
+                    'status'    => 'error',
+                    'toast'     => 'tanggal yang dipilih sudah penuh.'
+                ]);
             }
         });
 
         if ($validator->fails()) {
             $firstError = $validator->errors()->first();
             return response()->json([
-                'success' => false,
-                'message' => $firstError,
+                'status'    => 'error',
+                'toast'     => $firstError,
                 'errors'  => $validator->errors(),
             ], 422);
         }
 
+        $email = anti_injeksi($request->email);
+        $id_layanan = anti_injeksi($request->id_layanan);
+        $lokasi = anti_injeksi($request->lokasi);
+        $tanggal = anti_injeksi($request->tanggal);
+        $kontak = anti_injeksi($request->kontak);
+        $catatan = anti_injeksi($request->catatan);
+
         $kode = strtoupper(Str::random(6));
 
         // Simpan data
+        // dd($request->all());
+        $username = session('username');
+        // $username = 'praktikhuda@gmail.com';
+        
+        $isEmail = filter_var($username, FILTER_VALIDATE_EMAIL);
+
+        if ($isEmail) {
+            $id = Pelanggan::where('email', $username)->first();
+            $user = User::leftJoin('pelanggan', 'users.id_pelanggan', '=', 'pelanggan.id')
+                ->where('users.id_pelanggan', $id->id)
+                ->select('users.id_pelanggan')
+                ->first();
+        } else {
+            $user = User::where('user', $username)
+                ->select('users.id_pelanggan')
+                ->first();
+        }
+
+        // dd($user);
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'toast'  => 'akun pengguna tidak ditemukan!'
+            ]);
+        }
+        
+
         $post = PesanSekarang::create([
-            'namalengkap' => $request->namalengkap,
-            'email'       => $request->email,
-            'nomer'       => $request->nomer,
-            'alamat'      => $request->alamat,
-            'tanggal'     => $request->tanggal,
-            'layanan'     => $request->layanan,
-            'catatan'     => $request->catatan,
-            'kode'        => $kode,
+            'id_layanan'   => $id_layanan,
+            'id_pelanggan' => $user->id_pelanggan ?? 0,
+            'lokasi'      => $lokasi,
+            'tanggal'     => $tanggal,
+            'kontak'       => $kontak,
+            'catatan'     => $catatan,
             'status'      => 'tunggu',
-            'alasan'      => ''
+            'kode'        => $kode,
+            'alasan'      => '',
+            'id_teknisi'      => 0,
+            'created_at'   => now(),
+            'updated_at'   => now(),
         ]);
 
-        Mail::to($request->email)->send(new KirimPesan($post));
+        Mail::to($email)->send(new KirimPesan($post));
 
 
         // Response sukses, bisa pakai PostResource jika tersedia
         return response()->json([
-            'success' => true,
-            'message' => 'Data berhasil ditambahkan',
+            'status'    => 'success',
+            'toast' => 'Data berhasil ditambahkan',
             'data'    => $post,
         ]);
     }
@@ -173,6 +211,33 @@ class PesanSekarangController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Pesanan berhasil dibatalkan',
+        ]);
+    }
+
+    // public function listPesanan()
+    // {
+    //     $posts = PesanSekarang::select('tanggal')->get();
+
+    //     return response()->json([
+    //         'data' => $posts,
+    //         'success' => true,
+    //         'message' => 'Daftar pesanan berhasil dimuat',
+    //     ]);
+    // }
+
+    public function listPesanan()
+    {
+        $start = Carbon::now()->subMonth()->startOfMonth();
+        $end   = Carbon::now()->addMonth()->endOfMonth();
+
+        $posts = PesanSekarang::whereBetween('tanggal', [$start, $end])
+            ->select('tanggal')
+            ->get();
+
+        return response()->json([
+            'data'    => $posts,
+            'success' => true,
+            'message' => 'Daftar pesanan berhasil dimuat',
         ]);
     }
 }

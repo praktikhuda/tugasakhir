@@ -24,27 +24,23 @@
     <div class="px-4 mx-auto sm:px-6 lg:px-4 max-w-7xl">
         <div class="mt-12 sm:mt-16 mb-12 sm:mb-16">
             <div class="mt-6 overflow-hidden bg-white rounded-xl">
-                <div class="px-6 py-12 sm:p-12">
+                <div class="grid items-stretch gap-y-10 md:grid-cols-2 md:gap-x-5 px-6 py-12 sm:p-12">
+                    <div id="calendar"></div>
                     <form class="">
+                        <p class="text-5xl mb-10">Informasi</p>
+                        <p class="font-medium uppercase">Tanggal Pemesanan</p>
+                        <p class="text-2xl font-medium text-blue-950 capitalize mb-5" id="pilihtanggal">Silahkan Pilih Tanggal</p>
+                        <input type="hidden" value="" id="pilih_val_tanggal" name="pilihtanggal">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-4">
-                            <div>
-                                <label for="" class="text-base font-medium text-gray-900 required">Nama Lengkap</label>
-                                <div class="mt-2.5 relative">
-                                    <input type="text" name="namalengkap" id="namalengkap" placeholder="" class="block w-full px-4 py-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600" required />
-                                    <p class="text-red-600" id="alertnama"></p>
-                                </div>
-                            </div>
-
-                            <div>
+                            <div class="sm:col-span-2">
                                 <label for="" class="text-base font-medium text-gray-900 required">Email</label>
                                 <div class="mt-2.5 relative">
                                     <input type="email" name="email" id="email" placeholder="" class="block w-full px-4 py-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600" required />
-                                    <p class="text-red-600" id="alertemail"></p>
+                                    <p class="text-red-600" id="alertnomer"></p>
                                 </div>
                             </div>
-
                             <div>
-                                <label for="" class="text-base font-medium text-gray-900 required">Nomer WhatsApp</label>
+                                <label for="" class="text-base font-medium text-gray-900 required">Kontak</label>
                                 <div class="mt-2.5 relative">
                                     <input type="number" name="nomer" id="nomer" placeholder="" class="block w-full px-4 py-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600" required />
                                     <p class="text-red-600" id="alertnomer"></p>
@@ -52,31 +48,17 @@
                             </div>
 
                             <div>
-                                <label for="" class="text-base font-medium text-gray-900 required">Alamat</label>
+                                <label for="" class="text-base font-medium text-gray-900 required">Lokasi</label>
                                 <div class="mt-2.5 relative">
                                     <input type="text" name="alamat" id="alamat" placeholder="" class="block w-full px-4 py-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600" required />
                                     <p class="text-red-600" id="alertalamat"></p>
                                 </div>
                             </div>
 
-                            <div>
-                                <label for="" class="text-base font-medium text-gray-900 required">Tanggal</label>
-                                <div class="mt-2.5 relative">
-                                    <input type="date" name="tanggal" id="tanggal" placeholder="" class="block w-full px-4 py-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600" required />
-                                    <p class="text-red-600" id="alerttanggal"></p>
-                                </div>
-                            </div>
-
-                            <div>
+                            <div class="sm:col-span-2">
                                 <label for="" class="text-base font-medium text-gray-900 required">Pilih Layanan</label>
                                 <div class="mt-2.5 relative">
                                     <select name="layanan" id="layanan" required class="block w-full px-4 py-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600" required>
-                                        <option value="">-- Pilih Jenis Layanan --</option>
-                                        <option value="pemasangan">Pemasangan AC</option>
-                                        <option value="cuci">Servis / Cuci AC</option>
-                                        <option value="perbaikan">Perbaikan AC</option>
-                                        <option value="isi_freon">Isi Ulang Freon</option>
-                                        <option value="bongkar_pasang">Bongkar Pasang AC</option>
                                     </select>
                                     <p class="text-red-600" id="alertlayanan"></p>
                                 </div>
@@ -102,116 +84,275 @@
     </div>
 </section>
 
-<div id="toats" class="fixed bottom-5 right-5 flex flex-col-reverse space-y-2 space-y-reverse z-50"></div>
-
 <script>
+    const loadLayanan = () => {
+        const username = "{{ session('username') }}";
+        console.log(username);
+        if (username) {
+            $.ajax({
+                type: "get",
+                url: "{{ route('profil') }}",
+                success: function(response) {
+                    $('#email').val(response.data.email);
+                    $('#alamat').val(response.data.alamat);
+                    $('#nomer').val(response.data.nomor);
+                }
+            });
+        }
+
+        $.ajax({
+            type: "get",
+            url: "{{ route('getLayanan') }}",
+            success: function(response) {
+                let html = '<option value="">pilih layanan</option>';
+                $.each(response.data, function(i, d) {
+                    let detail = d.keterangan.join(' ');
+
+                    html += `
+                        <option value="${d.id}">${d.jenis_nama + ' ' + detail}</option>
+                    `;
+                });
+
+                $("#layanan").html(html);
+            }
+        });
+
+    }
+
     $("#tambahpesanan").on("click", function() {
         const btn = $(this);
         btn.prop("disabled", true);
 
-        const nama = $("#namalengkap").val().trim();
+        toastr.info('Mohon tunggu..');
+
         const email = $('#email').val().trim();
-        const nomer = $('#nomer').val().trim();
-        const alamat = $('#alamat').val().trim();
-        const tanggal = $('#tanggal').val().trim();
-        const layanan = $('#layanan').val().trim();
+
+        const id_layanan = $('#layanan').val().trim();
+        const lokasi = $('#alamat').val().trim();
+        const tanggal = $('#pilih_val_tanggal').val().trim();
+        const kontak = $('#nomer').val().trim();
         const catatan = $('#catatan').val().trim();
 
-        let isValid = true;
-
-        if (nama === "") {
-            $("#alertnama").text("Nama tidak boleh kosong!");
-            isValid = false;
-        } else {
-            $("#alertnama").text("");
-        }
-
-        if (email === "") {
-            $("#alertemail").text("Email tidak boleh kosong!");
-            isValid = false;
-        } else {
-            $("#alertemail").text("");
-        }
-
-        if (nomer === "") {
-            $("#alertnomer").text("Nomor tidak boleh kosong!");
-            isValid = false;
-        } else {
-            $("#alertnomer").text("");
-        }
-
-        if (alamat === "") {
-            $("#alertalamat").text("Tanggal tidak boleh kosong!");
-            isValid = false;
-        } else {
-            $("#alertalamat").text("");
-        }
-
-        if (tanggal === "") {
-            $("#alerttanggal").text("Tanggal tidak boleh kosong!");
-            isValid = false;
-        } else {
-            $("#alerttanggal").text("");
-        }
-
-        if (layanan === "") {
-            $("#alertlayanan").text("Tanggal tidak boleh kosong!");
-            isValid = false;
-        } else {
-            $("#alertlayanan").text("");
-        }
-
-        if (!isValid) {
-            btn.prop("disabled", false);
-            return;
-        }
-
-        const id = 'toast-' + Date.now();
-
-        $("#toats").prepend(toats('Sedang di proses!!', 'menunggu', 'yellow'));
 
         $.ajax({
             type: "POST",
             url: "/tambah",
             data: {
-                _token: $('meta[name="csrf-token"]').attr('content'), // penting untuk Laravel
-                namalengkap: nama,
+                _token: $('meta[name="csrf-token"]').attr('content'),
                 email: email,
-                nomer: nomer,
-                alamat: alamat,
+                kontak: kontak,
+                lokasi: lokasi,
                 tanggal: tanggal,
-                layanan: layanan,
+                id_layanan: id_layanan,
                 catatan: catatan
             },
             dataType: "json",
             success: function(response) {
-                console.log("Berhasil:", response);
-
-                $("#toats").prepend(toats(response.message, 'berhasil', 'green'));
-
-                setTimeout(function() {
-                    $("#toats").html('');
-                    window.location.href = "/tentang-kami";
-                }, 3000);
-
+                toastr.success(response.toast);
+                const username = "{{ session('username') }}";
+                if (username) {
+                    window.location.href = "{{ route('dashboard') }}";
+                } else {
+                    window.location.href = "{{ route('kalender') }}";
+                }
             },
             error: function(xhr, status, error) {
                 btn.prop("disabled", false);
+
 
                 let errorMessage = "Terjadi kesalahan. Silakan coba lagi.";
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     errorMessage = xhr.responseJSON.message;
                 }
 
+                // console.log();
 
-                $("#toats").prepend(toats(errorMessage, 'error', 'red'));
-
-                setTimeout(function() {
-                    $("#toats").html('');
-                }, 3000);
+                toastr.error(xhr.responseJSON.toast);
             }
         });
     })
 </script>
+
+<script>
+    // CALENDAR
+    $(document).ready(function() {
+        loadLayanan();
+        FullCalendar.globalLocales.push(function() {
+            'use strict';
+
+            var id = {
+                code: "id",
+                week: {
+                    dow: 1, // Monday is the first day of the week.
+                    doy: 7 // The week that contains Jan 1st is the first week of the year.
+                },
+                buttonText: {
+                    prev: "Mundur",
+                    next: "Maju",
+                    today: "Hari ini",
+                    month: "Bulan",
+                    week: "Minggu",
+                    day: "Hari",
+                    list: "Agenda"
+                },
+                weekText: "Mg",
+                allDayText: "Sehari penuh",
+                moreLinkText: "lebih",
+                noEventsText: "Tidak ada acara untuk ditampilkan"
+            };
+
+            return id;
+
+        }());
+
+        let hasilArray = []; // ← diisi dari AJAX
+        let dataMap = {}; // ← key = tanggal, value = jumlah
+
+        $.ajax({
+            type: "get",
+            url: "/getpesan",
+            dataType: "json",
+            success: function(response) {
+                const countByTanggal = {};
+
+                response.data.forEach(d => {
+                    const tgl = d.tanggal;
+                    countByTanggal[tgl] = (countByTanggal[tgl] || 0) + 1;
+                });
+
+                hasilArray = Object.entries(countByTanggal).map(([tanggal, jumlah]) => ({
+                    tanggal,
+                    jumlah
+                }));
+
+                dataMap = Object.fromEntries(
+                    hasilArray.map(item => [item.tanggal, item.jumlah])
+                );
+
+                calendar.render();
+            }
+        });
+
+        const now = new Date();
+        const start = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        const end = new Date(now.getFullYear(), now.getMonth() + 2, 0);
+
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            locale: 'id',
+            initialView: 'dayGridMonth',
+            dateClick: function(info) {
+                const date = info.date;
+
+                if (date < start || date > end) {
+                    return;
+                }
+
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const formatTanggal = `${year}-${month}-${day}`;
+
+
+                const jumlah = dataMap[formatTanggal];
+                if (jumlah >= 3) {
+                    $("#toats").prepend(toats('Sudah penuh', 'gagal', 'red'));
+                    setTimeout(function() {
+                        $("#toats").html('');
+                    }, 3000);
+                    return;
+                }
+                var tgl_t = info.date;
+                fnSelectDate(tgl_t);
+            },
+            eventClick: function(info) {
+                var tgl_t = info.event.extendedProps.tanggal;
+            },
+            eventClassNames: function(info) {
+                return ['fc-custom-center']
+            },
+            eventContent: function(info) {
+                return {
+                    html: info.event.extendedProps.lbl
+                }
+            },
+            eventDidMount: function(info) {
+
+                var evdata = info.event.extendedProps;
+                arr[evdata.tanggal] = evdata.id_jadwal;
+
+            },
+            dayCellDidMount: function(info) {
+                const date = info.date;
+
+                if (date < start || date > end) {
+                    return;
+                }
+
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const formatTanggal = `${year}-${month}-${day}`;
+
+                const jumlah = dataMap[formatTanggal];
+
+                const icon = document.createElement('i');
+                icon.className = 'fa-solid fa-calendar-check';
+
+                const teks = document.createElement('p');
+                teks.textContent = jumlah >= 3 ? 'PENUH' : `${jumlah || 0} BOOKING`;
+
+                // Tambahkan ikon kalender
+                icon.style.fontSize = '22px';
+                icon.style.color = jumlah >= 3 ? 'red' : '#007bff';
+                icon.style.fontSize = '20px';
+                icon.style.position = 'absolute';
+                icon.style.top = '50%';
+                icon.style.left = '50%';
+                icon.style.transform = 'translate(-50%, -50%)';
+                icon.style.pointerEvents = 'none';
+
+                // Tambahkan teks jumlah/penuh
+                teks.style.fontSize = '12px';
+                teks.style.color = jumlah >= 3 ? 'red' : '#007bff';
+                teks.style.position = 'absolute';
+                teks.style.bottom = '10px';
+                teks.style.left = '50%';
+                teks.style.transform = 'translateX(-50%)';
+                teks.style.margin = '0';
+                teks.style.pointerEvents = 'none';
+
+                info.el.style.position = 'relative';
+                info.el.appendChild(icon);
+                info.el.appendChild(teks);
+            },
+            eventMouseEnter: function(mouseEnterInfo) {},
+            eventMouseLeave: function(mouseEnterInfo) {}
+        });
+    })
+
+    function fnSelectDate(tgl) {
+        const tanggal = new Date(tgl);
+
+        const options = {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        };
+
+        const formatTanggal = tanggal.toLocaleDateString('id-ID', options);
+
+        const year = tanggal.getFullYear();
+        const month = String(tanggal.getMonth() + 1).padStart(2, '0'); // +1 karena 0 = Januari
+        const day = String(tanggal.getDate()).padStart(2, '0');
+
+        const formatted = `${year}-${month}-${day}`;
+
+        $("#pilihtanggal").text(formatTanggal);
+        $("#pilih_val_tanggal").val(formatted)
+    }
+</script>
+
 
 @endsection

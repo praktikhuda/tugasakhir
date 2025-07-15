@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('pesan_sekarangs', function (Blueprint $table) {
             $table->id();
-            $table->string('namalengkap');
-            $table->string('email');
-            $table->string('nomer');
-            $table->string('alamat');
+            $table->integer('id_layanan')->nullable();
+            $table->integer('id_pelanggan')->nullable();
+            $table->string('lokasi');
             $table->date('tanggal');
-            $table->string('layanan');
-            $table->text('catatan')->nullable();
-            $table->string('kode');
+            $table->string('kontak');
+            $table->string('catatan')->nullable();
             $table->string('status');
+            $table->string('kode');
             $table->string('alasan');
+            $table->integer('id_teknisi')->nullable();
             $table->timestamps();
         });
     }
