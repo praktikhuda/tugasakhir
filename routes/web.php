@@ -1,18 +1,21 @@
 <?php
 
+use App\Models\Layanan;
 use App\Mail\KirimPesan;
+use App\Models\Pemesanan;
+use App\Models\JenisLayanan;
 use Illuminate\Http\Request;
 use App\Models\PesanSekarang;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PemesananController;
+use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\LayananController;
 use App\Http\Controllers\PesanSekarangController;
-use App\Models\JenisLayanan;
-use App\Models\Pemesanan;
+use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +33,10 @@ Route::get('/modal/detail-v2', function () {
 });
 Route::get('/modal/detail-v3', function () {
     return view('landing-page.modal.detail-v3');
+});
+
+Route::get('/modal/detail-v4', function () {
+    return view('landing-page.modal.detail-v4');
 });
 
 
@@ -73,9 +80,40 @@ Route::post('/tambah', [PesanSekarangController::class, 'store']);
 Route::post('/cekKode', [PesanSekarangController::class, 'cekKode']);
 Route::post('/updateBatalkan', [PesanSekarangController::class, 'updateBatalkan']);
 
+
+// DASHBOARD
 Route::get('/viewapp', function () {
     return view("dashboard");
 })->name('viewapp');
+Route::get('/layanan', function () {
+    return view("layanan");
+})->name('layanan');
+
+Route::get('/jenis-layanan', function () {
+    return view("jenis-layanan");
+})->name('jenis-layanan');
+
+Route::get('/users', function () {
+    return view("users");
+})->name('users');
+
+Route::get('/get-jenis-layanan', [LayananController::class, 'index'])->name('get-jenis-layanan');
+Route::post('/cari-jenis-layanan', [LayananController::class, 'cari'])->name('cari-jenis-layanan');
+Route::post('/edit-jenis-layanan', [LayananController::class, 'edit'])->name('edit-jenis-layanan');
+Route::post('/tambah-jenis-layanan', [LayananController::class, 'tambah'])->name('tambah-jenis-layanan');
+Route::post('/hapus-jenis-layanan', [LayananController::class, 'hapus'])->name('hapus-jenis-layanan');
+
+Route::get('/lihat-layanan', [LayananController::class, 'lihat'])->name('lihat-layanan');
+Route::post('/cari-layanan', [LayananController::class, 'cari_layanan'])->name('cari-layanan');
+Route::get('/list-jenis-layanan', [LayananController::class, 'list_jenis_layanan'])->name('list-jenis-layanan');
+Route::post('/tambah-layanan', [LayananController::class, 'tambah_layanan'])->name('tambah-layanan');
+Route::post('/edit-layanan', [LayananController::class, 'edit_layanan'])->name('edit-layanan');
+
+Route::get('/get-users', [UsersController::class, 'index'])->name('get-users');
+Route::post('/cari-users', [UsersController::class, 'cari'])->name('cari-users');
+Route::post('/edit-users', [UsersController::class, 'edit'])->name('edit-users');
+Route::post('/tambah-users', [UsersController::class, 'tambah'])->name('tambah-users');
+Route::post('/hapus-users', [UsersController::class, 'hapus'])->name('hapus-users');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/getLayanan', [LandingPageController::class, 'index'])->name('getLayanan');
