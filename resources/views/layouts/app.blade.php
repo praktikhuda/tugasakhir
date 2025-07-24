@@ -21,8 +21,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/img/apple-icon.png') }}" />
-    <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon.png') }}" />
-    <title>Soft UI Dashboard Tailwind</title>
+    <link rel="icon" type="image/png" href="{{ ('assets/img/kooler.png') }}" />
+    <title>Dashboard Kooler - Servis & Pemasangan AC Profesional</title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Font Awesome Icons -->
@@ -39,6 +39,9 @@
 
     <!-- Toastr CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
@@ -83,6 +86,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 @yield('js')
 

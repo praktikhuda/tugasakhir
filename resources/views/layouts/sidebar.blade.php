@@ -1,9 +1,9 @@
 <aside class="max-w-62.5 ease-nav-brand z-990 fixed inset-y-0 my-4 ml-4 block w-full -translate-x-full flex-wrap items-center justify-between overflow-y-auto rounded-2xl border-0 bg-white p-0 antialiased shadow-none transition-transform duration-200 xl:left-0 xl:translate-x-0 xl:bg-transparent">
     <div class="h-19.5">
         <i class="absolute top-0 right-0 hidden p-4 opacity-50 cursor-pointer fas fa-times text-slate-400 xl:hidden" sidenav-close></i>
-        <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap text-slate-700" href="javascript:;" target="_blank">
-            <img src="./assets/img/logo-ct.png" class="inline h-full max-w-full transition-all duration-200 ease-nav-brand max-h-8" alt="main_logo" />
-            <span class="ml-1 font-semibold transition-all duration-200 ease-nav-brand">Soft UI Dashboard</span>
+        <a class="flex justify-center items-center px-8 py-6 m-0 text-sm whitespace-nowrap text-slate-700" href="javascript:;" target="_blank">
+            <img class="" src="{{ ('assets/img/kooler.png') }}" alt="" width="30%" />
+            <span class="ml-1 font-semibold transition-all duration-200 ease-nav-brand text-xl">Kooler</span>
         </a>
     </div>
 
@@ -52,9 +52,9 @@
             </li>
 
             <li class="mt-0.5 w-full">
-                <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold hover:bg-white hover:shadow-soft-xl group {{ request()->routeIs('') ? 'bg-white shadow-soft-xl' : '' }}" href="{{ route('layanan') }}">
-                    <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 group-hover:bg-gradient-to-tl group-hover:from-purple-700 group-hover:to-pink-500 {{ request()->routeIs('') ? 'bg-gradient-to-tl from-purple-700 to-pink-500' : '' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="group-hover:text-white {{ request()->routeIs('') ? 'text-white' : '' }}">
+                <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold hover:bg-white hover:shadow-soft-xl group {{ request()->routeIs('pemesanan') ? 'bg-white shadow-soft-xl' : '' }}" href="{{ route('pemesanan') }}">
+                    <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 group-hover:bg-gradient-to-tl group-hover:from-purple-700 group-hover:to-pink-500 {{ request()->routeIs('pemesanan') ? 'bg-gradient-to-tl from-purple-700 to-pink-500' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="group-hover:text-white {{ request()->routeIs('pemesanan') ? 'text-white' : '' }}">
                             <path d="M2.25 2.25a.75.75 0 0 0 0 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 0 0-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 0 0 0-1.5H5.378A2.25 2.25 0 0 1 7.5 15h11.218a.75.75 0 0 0 .674-.421 60.358 60.358 0 0 0 2.96-7.228.75.75 0 0 0-.525-.965A60.864 60.864 0 0 0 5.68 4.509l-.232-.867A1.875 1.875 0 0 0 3.636 2.25H2.25ZM3.75 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM16.5 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" />
                         </svg>
                     </div>
@@ -72,22 +72,6 @@
                     <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Users</span>
                 </a>
             </li>
-
-            <li class="w-full mt-4">
-                <h6 class="pl-6 ml-2 text-xs font-bold leading-tight uppercase opacity-60">Akun</h6>
-            </li>
-
-            <li class="mt-0.5 w-full">
-                <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold hover:bg-white hover:shadow-soft-xl group {{ request()->routeIs('') ? 'bg-white shadow-soft-xl' : '' }}" href="{{ route('layanan') }}">
-                    <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 group-hover:bg-gradient-to-tl group-hover:from-purple-700 group-hover:to-pink-500 {{ request()->routeIs('') ? 'bg-gradient-to-tl from-purple-700 to-pink-500' : '' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="group-hover:text-white {{ request()->routeIs('') ? 'text-white' : '' }}">
-                            <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clip-rule="evenodd" />
-                        </svg>
-
-                    </div>
-                    <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Profil</span>
-                </a>
-            </li>
         </ul>
     </div>
 
@@ -97,13 +81,11 @@
         <div class="after:opacity-65 after:bg-gradient-to-tl after:from-slate-600 after:to-slate-300 relative flex min-w-0 flex-col items-center break-words rounded-2xl border-0 border-solid border-blue-900 bg-white bg-clip-border shadow-none after:absolute after:top-0 after:bottom-0 after:left-0 after:z-10 after:block after:h-full after:w-full after:rounded-2xl after:content-['']" sidenav-card>
             <div class="mb-7.5 absolute h-full w-full rounded-2xl bg-cover bg-center" style="background-image: url('./assets/img/curved-images/white-curved.jpeg')"></div>
             <div class="relative z-20 flex-auto w-full p-4 text-left text-white">
-                <div class="flex items-center justify-center w-8 h-8 mb-4 text-center bg-white bg-center rounded-lg icon shadow-soft-2xl">
-                    <i class="top-0 z-10 text-lg leading-none text-transparent ni ni-diamond bg-gradient-to-tl from-slate-600 to-slate-300 bg-clip-text opacity-80" sidenav-card-icon></i>
-                </div>
+                <img class="bg-white rounded p-2 mb-2" src="{{ ('assets/img/kooler.png') }}" alt="" width="40%" />
                 <div class="transition-all duration-200 ease-nav-brand">
-                    <h6 class="mb-0 text-white">Need help?</h6>
-                    <p class="mt-0 mb-4 text-xs font-semibold leading-tight">Please check our docs</p>
-                    <a href="https://www.creative-tim.com/learning-lab/tailwind/html/quick-start/soft-ui-dashboard/" target="_blank" class="inline-block w-full px-8 py-2 mb-0 text-xs font-bold text-center text-black uppercase transition-all ease-in bg-white border-0 border-white rounded-lg shadow-soft-md bg-150 leading-pro hover:shadow-soft-2xl hover:scale-102">Documentation</a>
+                    <h6 class="mb-0 text-white">Kooler</h6>
+                    <p class="mt-0 mb-4 text-xs font-semibold leading-tight">Servis & Pemasangan AC Profesional</p>
+                    <!-- <a href="https://www.creative-tim.com/learning-lab/tailwind/html/quick-start/soft-ui-dashboard/" target="_blank" class="inline-block w-full px-8 py-2 mb-0 text-xs font-bold text-center text-black uppercase transition-all ease-in bg-white border-0 border-white rounded-lg shadow-soft-md bg-150 leading-pro hover:shadow-soft-2xl hover:scale-102">Documentation</a> -->
                 </div>
             </div>
         </div>

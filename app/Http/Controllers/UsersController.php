@@ -66,22 +66,54 @@ class UsersController extends Controller
 
     public function cari(Request $request)
     {
-        $id = $request->id;
+        $id = anti_injeksi($request->id);
 
-        $cari = JenisLayanan::where('id', $id)->first();
+        $cari = User::where('id', $id)->first();
+
+        $query = User::leftJoin("pelanggan as pl", "pl.id", "=", "users.id_pelanggan")
+            ->leftJoin("karyawan as kr", "kr.id", "=", "users.id_karyawan")
+            ->select(
+                "users.id",
+                "users.user",
+                "users.role",
+                "users.id_karyawan",
+                "users.id_pelanggan",
+
+                // Pelanggan fields
+                "pl.nama as pelanggan_nama",
+                "pl.alamat as pelanggan_alamat",
+                "pl.nomor as pelanggan_nomor",
+                "pl.email as pelanggan_email",
+
+                // Karyawan fields
+                "kr.nama as karyawan_nama",
+                "kr.alamat as karyawan_alamat",
+                "kr.nomor as karyawan_nomor",
+                "kr.email as karyawan_email",
+                "kr.is_teknisi"
+            )
+            ->where('users.id', $cari->id)
+            ->get();
 
         return response()->json([
             'status' => 'success',
             'toats' => 'berhasil menemukan data',
-            'data' => $cari
+            'data' => $query
         ]);
     }
 
     public function edit(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id'     => 'required',
-            'jenis'   => 'required',
+            'id'   => 'required',
+            'nama'   => 'required',
+            'username'   => 'required',
+            'email'   => 'required',
+            'alamat'   => 'required',
+            'nomor'   => 'required',
+            'role'   => 'required',
+            'is_teknisi'   => 'required',
+            'password'   => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -92,8 +124,52 @@ class UsersController extends Controller
             ]);
         }
 
-        $id     = anti_injeksi($request->id);
-        $jenis   = anti_injeksi($request->jenis);
+        $id   = anti_injeksi($request->id);
+        $nama   = anti_injeksi($request->nama);
+        $username   = anti_injeksi($request->username);
+        $email   = anti_injeksi($request->email);
+        $alamat   = anti_injeksi($request->alamat);
+        $nomor   = anti_injeksi($request->nomor);
+        $role   = anti_injeksi($request->role);
+        $is_teknisi   = anti_injeksi($request->is_teknisi);
+        $password   = anti_injeksi($request->password);
+
+        $id_user = User::where('id', $id)->first();
+        // dd($id_user->id_pelanggan);
+
+        if ($id_user->role === 'pelanggan') {
+            $pelanggan = Pelanggan::find($id_user->id_pelanggan);
+            // dd($pelanggan);
+            $pelanggan->nama = $nama;
+            $pelanggan->email = $email;
+            $pelanggan->alamat = $alamat;
+            $pelanggan->nomor = $nomor;
+            $pelanggan->updated_at = now();
+            $pelanggan->save();
+
+        } else {
+            $karyawan = Karyawan::find($id_user->id_karyawan);
+            $karyawan->nama = $nama;
+            $karyawan->email = $email;
+            $karyawan->alamat = $alamat;
+            $karyawan->nomor = $nomor;
+            $karyawan->is_teknisi = $is_teknisi === 'teknisi' ? true : false;
+            $karyawan->updated_at = now();
+            $karyawan->save();
+        }
+
+        $user = User::findOrFail($id);
+        $user->user = $username;
+        $user->role = $role;
+        // $user->pass = $password;
+        $user->updated_at = now();
+        $user->save();
+
+
+        return response()->json([
+            'status' => 'success',
+            'toast'  => 'user berhasil diedit.'
+        ]);
 
         // Update jenislayanan
         $jenislayanan = JenisLayanan::findOrFail($id);
@@ -178,7 +254,7 @@ class UsersController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'toast'  => 'jenis layanan berhasil ditambahakan.'
+            'toast'  => 'user berhasil ditambahakan.'
         ]);
     }
 

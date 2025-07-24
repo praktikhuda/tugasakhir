@@ -97,6 +97,10 @@ Route::get('/users', function () {
     return view("users");
 })->name('users');
 
+Route::get('/pemesanan', function () {
+    return view("pemesanan");
+})->name('pemesanan');
+
 Route::get('/get-jenis-layanan', [LayananController::class, 'index'])->name('get-jenis-layanan');
 Route::post('/cari-jenis-layanan', [LayananController::class, 'cari'])->name('cari-jenis-layanan');
 Route::post('/edit-jenis-layanan', [LayananController::class, 'edit'])->name('edit-jenis-layanan');
@@ -114,6 +118,14 @@ Route::post('/cari-users', [UsersController::class, 'cari'])->name('cari-users')
 Route::post('/edit-users', [UsersController::class, 'edit'])->name('edit-users');
 Route::post('/tambah-users', [UsersController::class, 'tambah'])->name('tambah-users');
 Route::post('/hapus-users', [UsersController::class, 'hapus'])->name('hapus-users');
+
+Route::get('/get-pemesanan', [PemesananController::class, 'index'])->name('get-pemesanan');
+Route::post('/cari-pemesanan', [PemesananController::class, 'cari'])->name('cari-pemesanan');
+Route::post('/cari-teknisi', [PemesananController::class, 'cari_teknisi'])->name('cari-teknisi');
+Route::post('/cari-data-teknisi', [PemesananController::class, 'cari_ji'])->name('cari-data-teknisi');
+Route::post('/edit-pemesanan', [PemesananController::class, 'edit'])->name('edit-pemesanan');
+Route::post('/tambah-pemesanan', [PemesananController::class, 'tambah'])->name('tambah-pemesanan');
+Route::post('/hapus-pemesanan', [PemesananController::class, 'hapus'])->name('hapus-pemesanan');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/getLayanan', [LandingPageController::class, 'index'])->name('getLayanan');

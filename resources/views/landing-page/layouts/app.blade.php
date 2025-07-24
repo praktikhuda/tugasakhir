@@ -9,7 +9,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="{{ ('assets/img/kooler.png') }}" />
     <link rel="icon" type="image/png" href="{{ ('assets/img/kooler.png') }}" />
 
-    <title>Servis & Pemasangan AC Profesional</title>
+    <title>Kooler - Servis & Pemasangan AC Profesional</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" /> -->
@@ -24,7 +24,7 @@
 
     <!-- Toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 

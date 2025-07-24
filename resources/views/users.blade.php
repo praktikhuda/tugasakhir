@@ -21,7 +21,7 @@
             <div class="px-4 py-6 pb-0 mb-0 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
                 <div class="flex justify-between items-center mb-2">
 
-                    <h6>Layanan</h6>
+                    <h6>User</h6>
                     <a class="bg-blue-500 text-white px-3 py-2 rounded-md shadow-md hover:bg-blue-400 cursor-pointer" id="tambah_jenis">Tambah</a>
                 </div>
             </div>
@@ -178,6 +178,7 @@
     $("#crud-modal, #crud-modal-hapus").on("click", "#tutupModal", function() {
         $("#crud-modal, #crud-modal-hapus").addClass('hidden');
         $("body").removeClass('overflow-hidden'); // Aktifkan scroll lagi
+        $("#is_teknisi_view").removeClass('hidden');
     });
 
     // Tutup modal jika klik di luar konten (area overlay)
@@ -185,6 +186,7 @@
         if (e.target === this) {
             $(this).addClass('hidden');
             $("body").removeClass('overflow-hidden');
+            $("#is_teknisi_view").removeClass('hidden');
         }
     });
 
@@ -199,16 +201,24 @@
         let id = $(this).data("id");
         $.ajax({
             type: "post",
-            url: "{{ route('cari-jenis-layanan') }}",
+            url: "{{ route('cari-users') }}",
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content'),
                 id: id
             },
             success: function(response) {
-                // console.log(response);
-                $("#jenis").val(response.data.jenis)
-                $("#id").val(response.data.id)
-
+                let user = response.data[0];
+                if (user.role == 'pelanggan') {
+                    $("#is_teknisi_view").addClass('hidden');
+                }
+                $("#id").val(user.id);
+                $("#nama").val(user.pelanggan_nama ? user.pelanggan_nama : user.karyawan_nama);
+                $("#username").val(user.user);
+                $("#email").val(user.pelanggan_email ? user.pelanggan_email : user.karyawan_email);
+                $("#alamat").val(user.pelanggan_alamat ? user.pelanggan_alamat : user.karyawan_alamat);
+                $("#nomor").val(user.pelanggan_nomor ? user.pelanggan_nomor : user.karyawan_nomor);
+                $("#role").val(user.role);
+                $("#is_teknisi").val(user.is_teknisi ? 'teknisi' : 'admin');
             }
         });
 
@@ -273,11 +283,18 @@
         }
         $.ajax({
             type: "post",
-            url: "{{ route('edit-jenis-layanan') }}",
+            url: "{{ route('edit-users') }}",
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content'),
                 id: id,
-                jenis: jenis
+                nama: nama,
+                username: username,
+                email: email,
+                alamat: alamat,
+                nomor: nomor,
+                role: role,
+                is_teknisi: is_teknisi,
+                password: password,
             },
             success: function(response) {
                 $("#crud-modal").addClass('hidden');
