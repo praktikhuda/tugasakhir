@@ -22,7 +22,7 @@
                 <div class="flex-shrink-0">
                     <div class="hidden lg:flex lg:items-center lg:ml-auto lg:space-x-10">
                         <a href="{{ route('beranda') }}" title="" class="text-xs uppercase text-white transition-all duration-200 hover:underline hover:underline-offset-8 {{ request()->routeIs('beranda') ? 'underline underline-offset-8' : '' }}">Beranda</a>
-                        <a href="{{ route('layanan') }}" title="" class="text-xs uppercase text-white transition-all duration-200 hover:underline hover:underline-offset-8 {{ request()->routeIs('layanan') ? 'underline underline-offset-8' : '' }}"> Layanan </a>
+                        <a href="{{ route('cek-layanan') }}" title="" class="text-xs uppercase text-white transition-all duration-200 hover:underline hover:underline-offset-8 {{ request()->routeIs('cek-layanan') ? 'underline underline-offset-8' : '' }}"> Layanan </a>
                         <a href="{{ route('kalender') }}" title="" class="text-xs uppercase text-white transition-all duration-200 hover:underline hover:underline-offset-8 {{ request()->routeIs('kalender') ? 'underline underline-offset-8' : '' }}"> Cek Jadwal</a>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                 <a href="{{ route('beranda') }}" title="" class="flex items-center p-2 text-black rounded-lg uppercase text-sm hover:bg-blue-600 hover:text-white {{ request()->routeIs('beranda') ? 'bg-blue-500 text-white' : '' }}">Beranda</a>
             </li>
             <li>
-                <a href="{{ route('layanan') }}" title="" class="flex items-center p-2 text-black rounded-lg uppercase text-sm hover:bg-blue-600 hover:text-white {{ request()->routeIs('layanan') ? 'bg-blue-500 text-white' : '' }}"> Layanan </a>
+                <a href="{{ route('cek-layanan') }}" title="" class="flex items-center p-2 text-black rounded-lg uppercase text-sm hover:bg-blue-600 hover:text-white {{ request()->routeIs('cek-layanan') ? 'bg-blue-500 text-white' : '' }}"> cek-layanan </a>
             </li>
         </ul>
         <div class="mt-auto pt-4 grid justify-items-stretch">

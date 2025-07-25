@@ -179,7 +179,7 @@ class UsersController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'toast'  => 'jenis layanan berhasil diperbarui.'
+            'toast'  => 'user berhasil diperbarui.'
         ]);
     }
 
@@ -273,14 +273,27 @@ class UsersController extends Controller
         }
 
         // Cari dan hapus data
-        $jenis = JenisLayanan::find($request->id);
+        $user = User::find($request->id);
+        // dd($user);
 
-        if ($jenis) {
-            $jenis->delete();
+        if ($user->id_pelanggan == null) {
+            $karyawan = Karyawan::find($user->id_karyawan);
+            // dd($karyawan);
+            $karyawan->delete();
+            $user->delete();
+        } else {
+            $pelanggan = Pelanggan::find($user->id_pelanggan);
+            // dd($pelanggan);
+            $pelanggan->delete();
+            $user->delete();
+        }
+
+        if ($user) {
+            $user->delete();
 
             return response()->json([
                 'status' => 'success',
-                'toast'  => 'Jenis layanan berhasil dihapus.',
+                'toast'  => 'user berhasil dihapus.',
             ]);
         } else {
             return response()->json([

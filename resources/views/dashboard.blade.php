@@ -7,7 +7,7 @@
             <!-- breadcrumb -->
             <ol class="flex flex-wrap pt-1 mr-12 bg-transparent rounded-lg sm:mr-16">
                 <li class="text-sm leading-normal">
-                    <a class="opacity-50 text-slate-700" href="javascript:;">Pages</a>
+                    <a class="opacity-50 text-slate-700" href="javascript:;">Halaman</a>
                 </li>
                 <li class="text-sm pl-2 capitalize leading-normal text-slate-700 before:float-left before:pr-2 before:text-gray-600 before:content-['/']" aria-current="page">Dashboard</li>
             </ol>
@@ -26,7 +26,7 @@
                     <div class="flex-none w-2/3 max-w-full px-3">
                         <div>
                             <p class="mb-0 text-sm font-semibold leading-normal">Pesanan Tunggu</p>
-                            <h5 class="mb-0 font-bold">
+                            <h5 class="mb-0 font-bold" id="status_tunggu">
                                 1
                             </h5>
                         </div>
@@ -51,7 +51,7 @@
                     <div class="flex-none w-2/3 max-w-full px-3">
                         <div>
                             <p class="mb-0 text-sm font-semibold leading-normal">Pesanan Proses</p>
-                            <h5 class="mb-0 font-bold">
+                            <h5 class="mb-0 font-bold" id="status_proses">
                                 2
                             </h5>
                         </div>
@@ -76,7 +76,7 @@
                     <div class="flex-none w-2/3 max-w-full px-3">
                         <div>
                             <p class="mb-0 text-sm font-semibold leading-normal">Pesanan Selesai</p>
-                            <h5 class="mb-0 font-bold">
+                            <h5 class="mb-0 font-bold" id="status_selesai">
                                 3
                             </h5>
                         </div>
@@ -102,7 +102,7 @@
                     <div class="flex-none w-2/3 max-w-full px-3">
                         <div>
                             <p class="mb-0 text-sm font-semibold leading-normal">Pesanan Batal</p>
-                            <h5 class="mb-0 font-bold">
+                            <h5 class="mb-0 font-bold" id="status_batal">
                                 4
                             </h5>
                         </div>
@@ -121,53 +121,8 @@
     </div>
 </div>
 
-<div class="flex flex-wrap -mx-3">
-    <div class="flex-none w-full max-w-full px-3">
-        <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
-            <div class="px-4 py-6 pb-0 mb-0 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
-                <h6>Pemesanan</h6>
-            </div>
-            <div class="mx-4 mb-2 flex justify-between">
-                <div class="flex justify-stretch">
-                    <select name="" id="entri_data" class="border rounded-sm">
-                        <option value="10" class="text-center">10</option>
-                        <option value="25" class="text-center">25</option>
-                        <option value="50" class="text-center">50</option>
-                        <option value="100" class="text-center">100</option>
-                    </select>
-                    <span>&nbsp;entri per halaman</span>
-                </div>
-                <div class="flex justify-stretch">
-                    <span>Cari :&nbsp;</span>
-                    <input type="text" class="border rounded-sm" placeholder="" id="cari_nama">
-                </div>
-            </div>
-            <div class="flex-auto px-0 pt-0 pb-2 mt-4 mb-2 mx-4">
-                <div class="p-0 overflow-x-auto p-3 border rounded-lg">
-                    <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500" id="tabel-pemesanan">
-                        <thead class="align-bottom">
-                            <tr>
-                                <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">No</th>
-                                <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama</th>
-                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Email</th>
-                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Whatsapp</th>
-                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Layana</th>
-                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Status</th>
-                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="mx-4 mt-2 mb-4 flex justify-between content-center">
-                <span id="showing_entri"></span>
-                <div class="flex justify-end" id="load_pagination"></div>
-            </div>
-        </div>
-    </div>
+<div class="py-5 px-3 bg-white">
+    <div id="container_chart"></div>
 </div>
 
 
@@ -176,153 +131,128 @@
 @section('js')
 <script>
     $(document).ready(function() {
-        loadAjaxTabel(1, null, 10);
-    })
-
-    function loadAjaxTabel(hal, cari = null, perPage) {
+        // console.log(sessionData.username);
+        
         $.ajax({
             type: "get",
-            url: "/pesanan",
-            data: {
-                hal: hal,
-                cari: cari,
-                perPage: perPage
-            },
+            url: sessionData.role == 'karyawan' ? "{{ route('dashboard-pemesanan') }}" : "{{ route('dashboard-dash-teknisi') }}",
             success: function(response) {
-                $("#tabel-pemesanan tbody").html(`<tr>
-                <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent text-center" colspan="7">Menunggu...</td>
-                </tr>`);
-                loadTabel(response, hal, perPage)
+                loadchart(response.data)
+                // console.log(response.data.statu);
+                let totalTunggu = 0;
+                let totalProses = 0;
+                let totalSelesai = 0;
+                let totalBatal = 0;
+
+                $.each(response.data, function(i, d) {
+                    d.status == 'tunggu' ? totalTunggu++ : '';
+                    d.status == 'proses' ? totalProses++ : '';
+                    d.status == 'selesai' ? totalSelesai++ : '';
+                    d.status == 'batal' ? totalBatal++ : '';
+                });
+
+                $("#status_tunggu").text(totalTunggu);
+                $("#status_proses").text(totalProses);
+                $("#status_selesai").text(totalSelesai);
+                $("#status_batal").text(totalBatal);
+
             }
         });
-    }
 
-    function loadTabel(data, hal, perPage) {
-        let html = '';
-        let pagination = '';
-        let showing = '';
-        if (data.total_data == 0) {
-            html = `<tr>
-            <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent text-center" colspan="7">Data tidak ditemukan</td>
-            </tr>`;
-        } else {
-            $.each(data.data, function(i, d) {
-                html += `
-                    <tr>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">${nomer_urut(hal ? hal : 1, i, perPage)}</td>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">${d.namalengkap}</td>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">${d.email}</td>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">${d.nomer}</td>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">${d.layanan}</td>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">${d.status}</td>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent"></td>
-                    </tr>
-                    `;
-            })
+        function loadchart(rawData) {
+            const stats = {};
 
-            let totalHalaman = Math.ceil(data.total_data / perPage);
-            let pageActive = hal || 1;
+            rawData.forEach(item => {
+                const month = item.tanggal.slice(5, 7);
+                if (!stats[month]) {
+                    stats[month] = {
+                        selesai: 0,
+                        batal: 0
+                    };
+                }
 
-            pagination = `
-                <button 
-                    class="text-center text-gray-500 border p-2 mr-1 rounded-lg tombol_prev 
-                    ${pageActive == 1 ? 'opacity-50 cursor-not-allowed' : ''}" 
-                    data-no="${pageActive - 1}" ${pageActive == 1 ? 'disabled' : ''}>
-                    &laquo;
-                </button>
-            `;
+                if (item.status === 'selesai') stats[month].selesai++;
+                if (item.status === 'batal') stats[month].batal++;
+            });
 
-            const createBtn = (i) => `
-                <button 
-                    class="text-center border p-2 ml-1 mr-1 rounded-lg tombol_pagination 
-                    ${i == pageActive ? 'bg-gradient-to-tl from-purple-700 to-pink-500 text-white' : 'text-gray-500'}" 
-                    data-no="${i}">
-                    ${i}
-                </button>`;
+            const monthNames = {
+                '01': 'Januari',
+                '02': 'Februari',
+                '03': 'Maret',
+                '04': 'April',
+                '05': 'Mei',
+                '06': 'Juni',
+                '07': 'Juli',
+                '08': 'Agustus',
+                '09': 'September',
+                '10': 'Oktober',
+                '11': 'November',
+                '12': 'Desember'
+            };
 
-            // Atur batas tampilan tengah seperti DataTables
-            let start = Math.max(1, pageActive - 2);
-            let end = Math.min(totalHalaman, pageActive + 2);
+            const monthKeys = Object.keys(stats).sort(); // ['01', '07', ...]
+            const categories = monthKeys.map(m => monthNames[m]);
+            const dataSelesai = monthKeys.map(month => stats[month].selesai);
+            const dataBatal = monthKeys.map(month => stats[month].batal);
 
-            // Tambahkan tombol pertama dan ...
-            if (start > 1) {
-                pagination += createBtn(1);
-                if (start > 2) pagination += `<span class="text-gray-400 mx-1">...</span>`;
-            }
 
-            // Tombol-tombol di tengah (maks 5)
-            for (let i = start; i <= end; i++) {
-                pagination += createBtn(i);
-            }
-
-            // Tambahkan ... dan tombol terakhir
-            if (end < totalHalaman) {
-                if (end < totalHalaman - 1) pagination += `<span class="text-gray-400 mx-1">...</span>`;
-                pagination += createBtn(totalHalaman);
-            }
-
-            // Tombol next
-            pagination += `
-                <button 
-                    class="text-center text-gray-500 border p-2 ml-1 rounded-lg tombol_next 
-                    ${pageActive == totalHalaman ? 'opacity-50 cursor-not-allowed' : ''}" 
-                    data-no="${pageActive + 1}" ${pageActive == totalHalaman ? 'disabled' : ''}>
-                    &raquo;
-                </button>
-            `;
-
-            let awal_data = (hal * perPage) - perPage + 1;
-            let akhir_data = hal * perPage;
-            showing = `Menampilkan ${awal_data} hingga ${akhir_data} dari ${data.total_data} data`;
+            // 3. Render chart
+            Highcharts.chart('container_chart', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Status Selesai dan Batal per Bulan',
+                    align: 'left',
+                    style: {
+                        fontFamily: "Poppins"
+                    }
+                },
+                xAxis: {
+                    categories: categories,
+                    title: {
+                        text: 'Bulan'
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Jumlah Status'
+                    }
+                },
+                legend: {
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom'
+                },
+                series: [{
+                    name: 'Selesai',
+                    data: dataSelesai,
+                    color: '#28a745'
+                }, {
+                    name: 'Batal',
+                    data: dataBatal,
+                    color: '#dc3545'
+                }],
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 600
+                        },
+                        chartOptions: {
+                            legend: {
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom'
+                            }
+                        }
+                    }]
+                }
+            });
         }
-        $("#load_pagination").html(pagination);
-        $("#tabel-pemesanan tbody").html(html);
-        $("#showing_entri").html(showing);
-    }
-
-    function nomer_urut(currentPage, index, perPage) {
-        return currentPage * perPage - (perPage - index) + 1;
-    }
-
-    $(document).on("click", "#load_pagination .tombol_pagination", function() {
-        let no = $(this).data('no');
-        let perPage = $("#entri_data").val();
-
-        loadAjaxTabel(no, null, perPage);
-    });
-
-    $(document).on("change", "#entri_data", function() {
-        let perPage = $("#entri_data").val();
-        let value = $("#cari_nama").val().trim();
-        loadAjaxTabel(1, value, perPage);
-    });
-
-    $(document).on("click", ".tombol_prev", function() {
-        const halBaru = parseInt($(this).data("no"));
-        const perPage = $("#entri_data").val();
-        loadAjaxTabel(halBaru, null, perPage);
-    });
-
-    $(document).on("click", ".tombol_next", function() {
-        const halBaru = parseInt($(this).data("no"));
-        const perPage = $("#entri_data").val();
-        loadAjaxTabel(halBaru, null, perPage);
-    });
 
 
-    let timer;
-
-    $("#cari_nama").on("input", function() {
-        clearTimeout(timer);
-
-        const value = $(this).val().trim();
-        let perPage = $("#entri_data").val();
-        $("#tabel-pemesanan tbody").html(`<tr>
-            <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent text-center" colspan="7">Menunggu...</td>
-            </tr>`);
-        timer = setTimeout(() => {
-            loadAjaxTabel(1, value, perPage);
-        }, 1000);
-    });
+    })
 </script>
+
 @endsection

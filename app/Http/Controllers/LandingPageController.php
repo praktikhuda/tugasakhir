@@ -46,7 +46,11 @@ class LandingPageController extends Controller
                 ->select('pelanggan.id', 'nama', 'alamat', 'nomor', 'email')
                 ->first();
         } else {
-            $user = User::where('user', $username)->first();
+            $id= User::where('user', $username)->first();
+            $user = Pelanggan::leftJoin('users', 'users.id_pelanggan', '=', 'pelanggan.id')
+                ->where('pelanggan.id', $id->id_pelanggan)
+                ->select('pelanggan.id', 'nama', 'alamat', 'nomor', 'email')
+                ->first();
         }
 
         // dd($user);
@@ -168,7 +172,7 @@ class LandingPageController extends Controller
             $id = Pelanggan::where('email', $username)->first();
             $pesan = PesanSekarang::leftJoin('pelanggan', 'pesan_sekarangs.id_pelanggan', '=', 'pelanggan.id')
                 ->where('pesan_sekarangs.id_pelanggan', $id->id)
-                ->where('status', 'selesai')
+                ->whereIn('status', ['selesai', 'batal'])
                 ->select('pesan_sekarangs.*')
                 ->orderBy('id', 'asc')
                 ->get();
@@ -178,7 +182,7 @@ class LandingPageController extends Controller
             $id = User::where('user', $username)->select('id_pelanggan')->first();
             $pesan = PesanSekarang::leftJoin('users', 'pesan_sekarangs.id_pelanggan', '=', 'users.id_pelanggan')
                 ->where('pesan_sekarangs.id_pelanggan', $id->id_pelanggan)
-                ->where('status', 'selesai')
+                ->whereIn('status', ['selesai', 'batal'])
                 ->select('pesan_sekarangs.*')
                 ->orderBy('id', 'asc')
                 ->get();
@@ -209,7 +213,7 @@ class LandingPageController extends Controller
             $id = Pelanggan::where('email', $username)->first();
             $pesan = PesanSekarang::leftJoin('pelanggan', 'pesan_sekarangs.id_pelanggan', '=', 'pelanggan.id')
                 ->where('pesan_sekarangs.id_pelanggan', $id->id)
-                ->where('status', 'tunggu')
+                ->whereIn('status', ['tunggu', 'proses'])
                 ->select('pesan_sekarangs.*')
                 ->orderBy('id', 'asc')
                 ->get();
@@ -219,7 +223,7 @@ class LandingPageController extends Controller
             $id = User::where('user', $username)->select('id_pelanggan')->first();
             $pesan = PesanSekarang::leftJoin('users', 'pesan_sekarangs.id_pelanggan', '=', 'users.id_pelanggan')
                 ->where('pesan_sekarangs.id_pelanggan', $id->id_pelanggan)
-                ->where('status', 'tunggu')
+                ->whereIn('status', ['tunggu', 'proses'])
                 ->select('pesan_sekarangs.*')
                 ->orderBy('id', 'asc')
                 ->get();

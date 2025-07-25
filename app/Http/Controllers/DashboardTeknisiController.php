@@ -2,42 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Karyawan;
+use App\Models\Pelanggan;
+use App\Models\Pemesanan;
 use App\Models\PesanTeknisi;
 use Illuminate\Http\Request;
 use App\Models\PesanSekarang;
 use Illuminate\Support\Facades\DB;
-use App\Http\Resources\PostResource;
-use App\Models\Pemesanan;
 use Illuminate\Support\Facades\Validator;
 
-class PemesananController extends Controller
+class DashboardTeknisiController extends Controller
 {
-    // public function index (Request $request)
-    // {
-    //     // $hal = $request->mulai;
-    //     $hal = $request->hal ? $request->hal : 1;
-    //     $total_data = PesanSekarang::count();
-    //     $data_mulai = $hal * 10 - 10;
-
-    //     $pesan = PesanSekarang::orderBy('id', 'asc')
-    //         ->skip($data_mulai)
-    //         ->take(10)
-    //         ->get();
-
-    //     return response()->json([
-    //         'success' => true,
-    //         'message' => 'List Pemesanan',
-    //         'data' => $pesan,
-    //         'total_data' => $total_data
-    //     ]);
-    // }
     public function index(Request $request)
     {
         $cari = $request->input('cari');      // kata kunci pencarian
         $hal = $request->hal;
         $perPage = $request->perPage;
         $data_mulai = ($hal - 1) * $perPage;
+
+        $username = anti_injeksi($request->username);
+        $isEmail = filter_var($username, FILTER_VALIDATE_EMAIL);
+
+        if ($isEmail) {
+            $id = Karyawan::where('email', $username)->first();
+        } else {
+            $id = User::where('user', $username)->select('id_karyawan')->first();
+        }
+
+        // dd($id);
 
         $query = PesanSekarang::leftJoin('layanan as l', 'l.id', '=', 'pesan_sekarangs.id_layanan')
             ->leftJoin('jenis_layanan as jl', 'jl.id', '=', 'l.id_jenis')
@@ -63,15 +56,16 @@ class PemesananController extends Controller
                 'pesan_sekarangs.status',
                 'pesan_sekarangs.id'
             )
+            ->where('pt.id_teknisi', $id->id ?? $id->id_karyawan)
             ->orderBy('pesan_sekarangs.id', 'asc');
 
         if (!empty($cari)) {
             $query->where('p.nama', 'like', '%' . $cari . '%');
             $pesan = $query->skip($data_mulai)->take($perPage)->get();
-            $total_data = $query->count();
+            $total_data = $pesan->count();
         } else {
             $pesan = $query->skip($data_mulai)->take($perPage)->get();
-            $total_data = PesanSekarang::count();
+            $total_data = $pesan->count();
         }
 
 
@@ -210,9 +204,18 @@ class PemesananController extends Controller
 
     public function dashboard()
     {
+        $username = session('username');
+        $isEmail = filter_var($username, FILTER_VALIDATE_EMAIL);
 
-        $data = Pemesanan::select('status', 'tanggal')->get();
+        if ($isEmail) {
+            $id = Karyawan::where('email', $username)->first();
+        } else {
+            $id = User::where('user', $username)->select('id_karyawan')->first();
+        }
 
+        $data = Pemesanan::select('status', 'tanggal')
+            ->leftJoin('pesan_teknisi AS pt', 'pesan_sekarangs.id', '=', 'pt.id_pesan')
+            ->where('pt.id_teknisi', $id->id ?? $id->id_karyawan)->get();
 
         return response()->json([
             'status' => 'success',

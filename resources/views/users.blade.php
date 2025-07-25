@@ -6,11 +6,11 @@
             <!-- breadcrumb -->
             <ol class="flex flex-wrap pt-1 mr-12 bg-transparent rounded-lg sm:mr-16">
                 <li class="text-sm leading-normal">
-                    <a class="opacity-50 text-slate-700" href="javascript:;">Pages</a>
+                    <a class="opacity-50 text-slate-700" href="javascript:;">Halaman</a>
                 </li>
-                <li class="text-sm pl-2 capitalize leading-normal text-slate-700 before:float-left before:pr-2 before:text-gray-600 before:content-['/']" aria-current="page">Dashboard</li>
+                <li class="text-sm pl-2 capitalize leading-normal text-slate-700 before:float-left before:pr-2 before:text-gray-600 before:content-['/']" aria-current="page">Users</li>
             </ol>
-            <h6 class="mb-0 font-bold capitalize">Dashboard</h6>
+            <h6 class="mb-0 font-bold capitalize">Users</h6>
         </nav>
     </div>
 </nav>
@@ -19,9 +19,7 @@
     <div class="flex-none w-full max-w-full px-3">
         <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
             <div class="px-4 py-6 pb-0 mb-0 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
-                <div class="flex justify-between items-center mb-2">
-
-                    <h6>User</h6>
+                <div class="flex justify-end items-center mb-2">
                     <a class="bg-blue-500 text-white px-3 py-2 rounded-md shadow-md hover:bg-blue-400 cursor-pointer" id="tambah_jenis">Tambah</a>
                 </div>
             </div>
@@ -45,7 +43,7 @@
                     <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500" id="tabel-pemesanan" style="width: 100%;">
                         <thead class="align-bottom">
                             <tr>
-                                <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" width="5%">No</th>
+                                <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70" width="5%">No</th>
                                 <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Username</th>
                                 <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Email</th>
                                 <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama</th>
@@ -76,7 +74,7 @@
             <!-- Modal header -->
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
                 <h3 class="text-lg font-semibold text-gray-900">
-                    Jenis Layanan
+                    Users
                 </h3>
                 <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center cursor-pointer" data-modal-toggle="crud-modal" id="tutupModal">
                     <svg class="w-3 h-3" aria-hidden="true" fill="none" viewBox="0 0 14 14">
@@ -125,7 +123,7 @@
                     </div>
                     <div class="col-span-2">
                         <label for="description" class="block mb-2 text-sm font-medium text-gray-900 required">Password</label>
-                        <input type="text" id="password" rows="4" class="block p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3"></input>
+                        <input type="password" id="password" rows="4" class="block p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3"></input>
                     </div>
                 </div>
                 <div class="flex justify-end">
@@ -145,7 +143,7 @@
             <!-- Modal header -->
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
                 <h3 class="text-lg font-semibold text-gray-900">
-                    Jenis Layanan
+                    Users
                 </h3>
                 <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center cursor-pointer" data-modal-toggle="crud-modal" id="tutupModal">
                     <svg class="w-3 h-3" aria-hidden="true" fill="none" viewBox="0 0 14 14">
@@ -316,7 +314,7 @@
         let id = $("#id").val()
         $.ajax({
             type: "post",
-            url: "{{ route('hapus-jenis-layanan') }}",
+            url: "{{ route('hapus-users') }}",
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content'),
                 id: id

@@ -234,7 +234,7 @@ class LayananController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'toast'  => 'jenis layanan berhasil ditambahakan.'
+            'toast'  => 'layanan berhasil ditambahakan.'
         ]);
     }
 
@@ -272,5 +272,37 @@ class LayananController extends Controller
             'status' => 'success',
             'toast'  => 'layanan berhasil diperbarui.'
         ]);
+    }
+
+    public function hapus_layanan(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors(),
+                'toast'  => 'ID tidak valid atau tidak ditemukan.',
+            ]);
+        }
+
+        // Cari dan hapus data
+        $jenis = Layanan::find($request->id);
+
+        if ($jenis) {
+            $jenis->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'toast'  => 'layanan berhasil dihapus.',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'toast'  => 'Data tidak ditemukan.',
+            ]);
+        }
     }
 }

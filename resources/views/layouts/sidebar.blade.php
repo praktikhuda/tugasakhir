@@ -26,7 +26,7 @@
                 </a>
             </li>
 
-            <li class="mt-0.5 w-full">
+            <li class="mt-0.5 w-full {{ session('role') == 'teknisi' ? 'hidden' : '' }}">
                 <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold hover:bg-white hover:shadow-soft-xl group {{ request()->routeIs('layanan') ? 'bg-white shadow-soft-xl' : '' }}" href="{{ route('layanan') }}">
                     <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 group-hover:bg-gradient-to-tl group-hover:from-purple-700 group-hover:to-pink-500 {{ request()->routeIs('layanan') ? 'bg-gradient-to-tl from-purple-700 to-pink-500' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="group-hover:text-white {{ request()->routeIs('layanan') ? 'text-white' : '' }}">
@@ -40,7 +40,7 @@
                 </a>
             </li>
 
-            <li class="mt-0.5 w-full">
+            <li class="mt-0.5 w-full {{ session('role') == 'teknisi' ? 'hidden' : '' }}">
                 <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold hover:bg-white hover:shadow-soft-xl group {{ request()->routeIs('jenis-layanan') ? 'bg-white shadow-soft-xl' : '' }}" href="{{ route('jenis-layanan') }}">
                     <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 group-hover:bg-gradient-to-tl group-hover:from-purple-700 group-hover:to-pink-500 {{ request()->routeIs('jenis-layanan') ? 'bg-gradient-to-tl from-purple-700 to-pink-500' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="group-hover:text-white {{ request()->routeIs('jenis-layanan') ? 'text-white' : '' }}">
@@ -51,7 +51,7 @@
                 </a>
             </li>
 
-            <li class="mt-0.5 w-full">
+            <li class="mt-0.5 w-full {{ session('role') == 'teknisi' ? 'hidden' : '' }}">
                 <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold hover:bg-white hover:shadow-soft-xl group {{ request()->routeIs('pemesanan') ? 'bg-white shadow-soft-xl' : '' }}" href="{{ route('pemesanan') }}">
                     <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 group-hover:bg-gradient-to-tl group-hover:from-purple-700 group-hover:to-pink-500 {{ request()->routeIs('pemesanan') ? 'bg-gradient-to-tl from-purple-700 to-pink-500' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="group-hover:text-white {{ request()->routeIs('pemesanan') ? 'text-white' : '' }}">
@@ -61,8 +61,18 @@
                     <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Pemesanan</span>
                 </a>
             </li>
+            <li class="mt-0.5 w-full {{ session('role') == 'karyawan' ? 'hidden' : '' }}">
+                <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold hover:bg-white hover:shadow-soft-xl group {{ request()->routeIs('pemesanan-teknisi') ? 'bg-white shadow-soft-xl' : '' }}" href="{{ route('pemesanan-teknisi') }}">
+                    <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 group-hover:bg-gradient-to-tl group-hover:from-purple-700 group-hover:to-pink-500 {{ request()->routeIs('pemesanan-teknisi') ? 'bg-gradient-to-tl from-purple-700 to-pink-500' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="group-hover:text-white {{ request()->routeIs('pemesanan-teknisi') ? 'text-white' : '' }}">
+                            <path d="M2.25 2.25a.75.75 0 0 0 0 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 0 0-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 0 0 0-1.5H5.378A2.25 2.25 0 0 1 7.5 15h11.218a.75.75 0 0 0 .674-.421 60.358 60.358 0 0 0 2.96-7.228.75.75 0 0 0-.525-.965A60.864 60.864 0 0 0 5.68 4.509l-.232-.867A1.875 1.875 0 0 0 3.636 2.25H2.25ZM3.75 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM16.5 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" />
+                        </svg>
+                    </div>
+                    <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Pemesanan</span>
+                </a>
+            </li>
 
-            <li class="mt-0.5 w-full">
+            <li class="mt-0.5 w-full {{ session('role') == 'teknisi' ? 'hidden' : '' }}">
                 <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold hover:bg-white hover:shadow-soft-xl group {{ request()->routeIs('users') ? 'bg-white shadow-soft-xl' : '' }}" href="{{ route('users') }}">
                     <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 group-hover:bg-gradient-to-tl group-hover:from-purple-700 group-hover:to-pink-500 {{ request()->routeIs('users') ? 'bg-gradient-to-tl from-purple-700 to-pink-500' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="group-hover:text-white {{ request()->routeIs('users') ? 'text-white' : '' }}">
@@ -90,6 +100,6 @@
             </div>
         </div>
         <!-- pro btn  -->
-        <a class="inline-block w-full px-6 py-3 my-4 text-xs font-bold text-center text-white uppercase align-middle transition-all ease-in border-0 rounded-lg select-none shadow-soft-md bg-150 bg-x-25 leading-pro bg-gradient-to-tl from-purple-700 to-pink-500 hover:shadow-soft-2xl hover:scale-102" target="_blank" href="https://www.creative-tim.com/product/soft-ui-dashboard-pro-tailwind?ref=sidebarfree">Logout</a>
+        <a class="inline-block w-full px-6 py-3 my-4 text-xs font-bold text-center text-white uppercase align-middle transition-all ease-in border-0 rounded-lg select-none shadow-soft-md bg-150 bg-x-25 leading-pro bg-gradient-to-tl from-purple-700 to-pink-500 hover:shadow-soft-2xl hover:scale-102" href="{{ route('auth.logout') }}">Logout</a>
     </div>
 </aside>

@@ -88,6 +88,21 @@
 <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<!-- <script src="https://code.highcharts.com/themes/adaptive.js"></script> -->
+
+<script>
+    const sessionData = {
+        username: "{{ session('username') }}",
+        role: "{{ session('role') }}"
+    };
+    console.log(sessionData.role); // cek hasilnya
+    console.log(sessionData.username); // cek hasilnya
+</script>
 @yield('js')
 
 </html>

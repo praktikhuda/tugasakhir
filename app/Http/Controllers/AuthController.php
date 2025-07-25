@@ -190,6 +190,7 @@ class AuthController extends Controller
             }        
         } else {
             $user = DB::table('users')->where('user', $username)->first();
+            $karyawan = DB::table('karyawan')->where('id', $user->id_karyawan)->first();
         }
 
         if (!$user) {
@@ -207,11 +208,21 @@ class AuthController extends Controller
             ]);
         }
 
+        $role = '';
+        // dd($karyawan);
+        if ($user->role == 'karyawan') {
+            $karyawan->is_teknisi ? $role = 'teknisi' : $role = $user->role;
+        } else {
+            $role = $user->role;
+        }
+
+        // dd($role);
+
         $request->session()->regenerate();
 
         Session::put([
             'username'    => $username,
-            'role' => $user->role
+            'role' => $role
         ]);
 
 

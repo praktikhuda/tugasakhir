@@ -18,15 +18,13 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // if (Session::has('username')) {
-        //     return redirect('/viewapp');
-        // }
+        $role = Session::get('role');
 
-        if (Session::has('role') == 'pelanggan') {
+        if ($role === 'pelanggan') {
             return redirect()->route('dashboard');
         }
 
-        if (Session::has('role') == 'admin' || Session::has('role') == 'teknisi') {
+        if ($role === 'karyawan' || $role === 'teknisi') {
             return redirect()->route('viewapp');
         }
 
