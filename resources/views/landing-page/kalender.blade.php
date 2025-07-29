@@ -23,122 +23,12 @@
 <section class="py-10 bg-gray-50 sm:py-16 lg:py-24">
     <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8 p-3 bg-white">
         <div id="calendar"></div>
-
+        <div class="mt-3">
+            <a href="/pesan-batal" class="text-blue-700 underline underline-offset-1">Klik jika ingin membatalkan pesanan..</a>
+        </div>
     </div>
 </section>
 
-
-<div id="toats" class="fixed bottom-5 right-5 flex flex-col-reverse space-y-2 space-y-reverse z-50"></div>
-
-<script>
-    $("#tambahpesanan").on("click", function() {
-        const btn = $(this);
-        btn.prop("disabled", true);
-
-        const nama = $("#namalengkap").val().trim();
-        const email = $('#email').val().trim();
-        const nomer = $('#nomer').val().trim();
-        const alamat = $('#alamat').val().trim();
-        // const tanggal = $('#tanggal').val().trim();
-        const layanan = $('#layanan').val().trim();
-        const catatan = $('#catatan').val().trim();
-
-        let isValid = true;
-
-        if (nama === "") {
-            $("#alertnama").text("Nama tidak boleh kosong!");
-            isValid = false;
-        } else {
-            $("#alertnama").text("");
-        }
-
-        if (email === "") {
-            $("#alertemail").text("Email tidak boleh kosong!");
-            isValid = false;
-        } else {
-            $("#alertemail").text("");
-        }
-
-        if (nomer === "") {
-            $("#alertnomer").text("Nomor tidak boleh kosong!");
-            isValid = false;
-        } else {
-            $("#alertnomer").text("");
-        }
-
-        if (alamat === "") {
-            $("#alertalamat").text("Tanggal tidak boleh kosong!");
-            isValid = false;
-        } else {
-            $("#alertalamat").text("");
-        }
-
-        // if (tanggal === "") {
-        //     $("#alerttanggal").text("Tanggal tidak boleh kosong!");
-        //     isValid = false;
-        // } else {
-        //     $("#alerttanggal").text("");
-        // }
-
-        if (layanan === "") {
-            $("#alertlayanan").text("Tanggal tidak boleh kosong!");
-            isValid = false;
-        } else {
-            $("#alertlayanan").text("");
-        }
-
-        if (!isValid) {
-            btn.prop("disabled", false);
-            return;
-        }
-
-        const id = 'toast-' + Date.now();
-
-        $("#toats").prepend(toats('Sedang di proses!!', 'menunggu', 'yellow'));
-
-        $.ajax({
-            type: "POST",
-            url: "/tambah",
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                namalengkap: nama,
-                email: email,
-                nomer: nomer,
-                alamat: alamat,
-                tanggal: "2025-07-02",
-                layanan: layanan,
-                catatan: catatan
-            },
-            dataType: "json",
-            success: function(response) {
-                console.log("Berhasil:", response);
-
-                $("#toats").prepend(toats(response.message, 'berhasil', 'green'));
-
-                setTimeout(function() {
-                    $("#toats").html('');
-                    window.location.href = "/tentang-kami";
-                }, 3000);
-
-            },
-            error: function(xhr, status, error) {
-                btn.prop("disabled", false);
-
-                let errorMessage = "Terjadi kesalahan. Silakan coba lagi.";
-                if (xhr.responseJSON && xhr.responseJSON.message) {
-                    errorMessage = xhr.responseJSON.message;
-                }
-
-
-                $("#toats").prepend(toats(errorMessage, 'error', 'red'));
-
-                setTimeout(function() {
-                    $("#toats").html('');
-                }, 3000);
-            }
-        });
-    })
-</script>
 
 <script>
     // CALENDAR
@@ -149,8 +39,8 @@
             var id = {
                 code: "id",
                 week: {
-                    dow: 1, // Monday is the first day of the week.
-                    doy: 7 // The week that contains Jan 1st is the first week of the year.
+                    dow: 1,
+                    doy: 7
                 },
                 buttonText: {
                     prev: "Mundur",

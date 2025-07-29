@@ -82,29 +82,32 @@ class PesanSekarangController extends Controller
         // dd($request->all());
         $username = session('username');
         // $username = 'praktikhuda@gmail.com';
+
+        if ($username) {
+            $isEmail = filter_var($username, FILTER_VALIDATE_EMAIL);
+    
+            if ($isEmail) {
+                $id = Pelanggan::where('email', $username)->first();
+                $user = User::leftJoin('pelanggan', 'users.id_pelanggan', '=', 'pelanggan.id')
+                    ->where('users.id_pelanggan', $id->id)
+                    ->select('users.id_pelanggan')
+                    ->first();
+            } else {
+                $user = User::where('user', $username)
+                    ->select('users.id_pelanggan')
+                    ->first();
+            }
+    
+            // dd($user);
+    
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'toast'  => 'akun pengguna tidak ditemukan!'
+                ]);
+            }
+        }
         
-        $isEmail = filter_var($username, FILTER_VALIDATE_EMAIL);
-
-        if ($isEmail) {
-            $id = Pelanggan::where('email', $username)->first();
-            $user = User::leftJoin('pelanggan', 'users.id_pelanggan', '=', 'pelanggan.id')
-                ->where('users.id_pelanggan', $id->id)
-                ->select('users.id_pelanggan')
-                ->first();
-        } else {
-            $user = User::where('user', $username)
-                ->select('users.id_pelanggan')
-                ->first();
-        }
-
-        // dd($user);
-
-        if (!$user) {
-            return response()->json([
-                'status' => 'error',
-                'toast'  => 'akun pengguna tidak ditemukan!'
-            ]);
-        }
         
 
         $post = PesanSekarang::create([
@@ -231,6 +234,7 @@ class PesanSekarangController extends Controller
         $end   = Carbon::now()->addMonth()->endOfMonth();
 
         $posts = PesanSekarang::whereBetween('tanggal', [$start, $end])
+            ->whereNotIn('status', ['selesai', 'proses', 'tunggu'])
             ->select('tanggal')
             ->get();
 

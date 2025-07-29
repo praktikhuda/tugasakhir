@@ -131,14 +131,12 @@
 @section('js')
 <script>
     $(document).ready(function() {
-        // console.log(sessionData.username);
-        
+
         $.ajax({
             type: "get",
             url: sessionData.role == 'karyawan' ? "{{ route('dashboard-pemesanan') }}" : "{{ route('dashboard-dash-teknisi') }}",
             success: function(response) {
                 loadchart(response.data)
-                // console.log(response.data.statu);
                 let totalTunggu = 0;
                 let totalProses = 0;
                 let totalSelesai = 0;

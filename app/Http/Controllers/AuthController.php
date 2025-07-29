@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Mail\KirimOtp;
+use App\Models\Karyawan;
 use App\Models\Pelanggan;
 use App\Models\SendOtp;
 use Illuminate\Http\Request;
@@ -34,8 +35,10 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'username'      => 'required',
             'email'      => 'required',
+            'nama'      => 'required',
+            'alamat'      => 'required',
+            'nomor'      => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -47,24 +50,6 @@ class AuthController extends Controller
         }
 
         $email = anti_injeksi($request->email);
-        $username = anti_injeksi($request->username);
-
-        $user = DB::table('pelanggan')->where('email', $email)->first();
-        $username_ = DB::table('users')->where('user', $username)->first();
-
-        if ($user) {
-            return response()->json([
-                'status'    => 'error',
-                'toast'     => 'email sudah terdaftar'
-            ]);
-        }
-
-        if ($username_) {
-            return response()->json([
-                'status'    => 'error',
-                'toast'     => 'username sudah ada yang menggunakan'
-            ]);
-        }
 
         $count = DB::table('send_otp')->where('email', $email)->count();
 
@@ -96,6 +81,10 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email'      => 'required',
+            'user'      => 'required',
+            'nama'      => 'required',
+            'alamat'      => 'required',
+            'nomor'      => 'required',
             'password'      => 'required',
             'otp'      => 'required'
         ]);
@@ -110,6 +99,10 @@ class AuthController extends Controller
 
         $email = anti_injeksi($request->email);
         $pass = anti_injeksi($request->password);
+        $nama = anti_injeksi($request->nama);
+        $alamat = anti_injeksi($request->alamat);
+        $nomor = anti_injeksi($request->nomor);
+        $user = anti_injeksi($request->user);
         $otp = anti_injeksi($request->otp);
 
         $otp = DB::table('send_otp')->where('email', $email)->where('kode', $otp)->first();
@@ -125,17 +118,17 @@ class AuthController extends Controller
 
         // Simpan ke tabel `pelanggan`
         $pelanggan = Pelanggan::create([
-            'nama' => '',
+            'nama' => $nama,
             'email' => $email,
-            'alamat' => '',
-            'nomor' => '',
+            'alamat' => $alamat,
+            'nomor' => $nomor,
             'created_at'   => now(),
             'updated_at'   => now(),
         ]);
 
         // Simpan ke tabel `users`
         User::create([
-            'user' => '',
+            'user' => $user,
             'pass'     => Hash::make($pass),
             'role' => 'pelanggan',
             'id_pelanggan' => $pelanggan->id,
@@ -173,12 +166,12 @@ class AuthController extends Controller
 
         if ($isEmail) {
             $pelanggan = DB::table('pelanggan')->where('email', $username)->first();
-    
+
             if ($pelanggan) {
                 $user = DB::table('users')->where('id_pelanggan', $pelanggan->id)->first();
             } else {
                 $karyawan = DB::table('karyawan')->where('email', $username)->first();
-    
+
                 if ($karyawan) {
                     $user = DB::table('users')->where('id_karyawan', $karyawan->id)->first();
                 } else {
@@ -187,7 +180,7 @@ class AuthController extends Controller
                         'toast'  => 'username tidak di temukan',
                     ]);
                 }
-            }        
+            }
         } else {
             $user = DB::table('users')->where('user', $username)->first();
             $karyawan = DB::table('karyawan')->where('id', $user->id_karyawan)->first();
@@ -230,6 +223,51 @@ class AuthController extends Controller
             'status' => 'success',
             'toast'  => 'login berhasil'
         ]);
+    }
+
+    public function cek(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user'      => 'required',
+            'email'      => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status'    => 'error',
+                'errors'     => $validator->errors(),
+                'toast'     => 'harus diisi semua'
+            ]);
+        }
+
+        $user = anti_injeksi($request->user);
+        $email = anti_injeksi($request->email);
+
+        $cek = User::select('user')->where('user', $user)->get();
+        if ($cek->isEmpty()) {
+
+            $cekPelanggan = Pelanggan::where('email', $email)->exists();
+            $cekKaryawan  = Karyawan::where('email', $email)->exists();
+
+            if (!$cekPelanggan && !$cekKaryawan) {
+                return response()->json([
+                    'status' => 'success',
+                    'toast'  => 'username atau email belum dipakai'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'toast'  => 'email sudah dipakai'
+                ]);
+            }
+
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'toast'  => 'username sudah dipakai'
+            ]);
+        }
+
     }
 
     public function logout(Request $request)

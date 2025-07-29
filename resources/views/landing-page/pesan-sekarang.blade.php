@@ -87,7 +87,6 @@
 <script>
     const loadLayanan = () => {
         const username = "{{ session('username') }}";
-        console.log(username);
         if (username) {
             $.ajax({
                 type: "get",
@@ -133,6 +132,17 @@
         const kontak = $('#nomer').val().trim();
         const catatan = $('#catatan').val().trim();
 
+        const today = new Date();
+        const inputDate = new Date(tanggal);
+
+        today.setHours(0, 0, 0, 0);
+        inputDate.setHours(0, 0, 0, 0);
+
+        if (inputDate <= today) {
+            btn.prop("disabled", false);
+            toastr.error('minimal tanggal yang dipilih besok');
+            return;
+        }
 
         $.ajax({
             type: "POST",
@@ -164,8 +174,6 @@
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     errorMessage = xhr.responseJSON.message;
                 }
-
-                // console.log();
 
                 toastr.error(xhr.responseJSON.toast);
             }

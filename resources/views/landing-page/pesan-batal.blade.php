@@ -62,28 +62,24 @@
         $('#batalkan').off('click').on('click', function() {
             const btn = $(this);
 
+            toastr.info('Mohon tunggu..');
             btn.prop("disabled", true);
 
             const kode = $("#kode").val().trim();
-
-            console.log(kode);
 
 
             let isValid = true;
 
             if (kode === "") {
-                $("#alertkode").text("Kode tidak boleh kosong!");
+                toastr.error('kode tidak boleh kosong');
                 isValid = false;
-            } else {
-                $("#alertkode").text("");
+                return;
             }
 
             if (!isValid) {
                 btn.prop("disabled", false);
                 return;
             }
-
-            $("#toats").prepend(toats('Sedang di proses!!', 'menunggu', 'yellow'));
 
             $.ajax({
                 type: "POST",
@@ -94,18 +90,10 @@
                 },
                 dataType: "json",
                 success: function(response) {
-                    console.log("Berhasil:", response);
                     $("#load-modal").load('/modal-detail', function() {
                         $("#crud-modal").removeClass("hidden").addClass("flex");
                     })
                     btn.prop("disabled", false);
-
-                    $("#toats").prepend(toats(response.message, 'berhasil', 'green'));
-
-                    setTimeout(function() {
-                        $("#toats").html('');
-                    }, 3000);
-
                 },
                 error: function(xhr, status, error) {
                     btn.prop("disabled", false);
@@ -114,13 +102,7 @@
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMessage = xhr.responseJSON.message;
                     }
-
-
-                    $("#toats").prepend(toats(errorMessage, 'error', 'red'));
-
-                    setTimeout(function() {
-                        $("#toats").html('');
-                    }, 3000);
+                    toastr.info(errorMessage);
                 }
             });
         });
@@ -135,6 +117,8 @@
 
     $("#load-modal").off("click", "#tambahpesanan").on("click", "#tambahpesanan", function() {
         const btn = $(this);
+        toastr.info('Mohon tunggu..');
+
         btn.prop("disabled", true);
 
         const alasan = $("#description").val().trim();
@@ -143,18 +127,15 @@
         let isValid = true;
 
         if (alasan === "") {
-            $("#alertalasan").text("Alasan tidak boleh kosong!");
+            toastr.error('harus di isi semua');
             isValid = false;
-        } else {
-            $("#alertalasan").text("");
+            return;
         }
 
         if (!isValid) {
             btn.prop("disabled", false);
             return;
         }
-
-        $("#toats").prepend(toats('Sedang di proses!!', 'menunggu', 'yellow'));
 
         $.ajax({
             type: "POST",
@@ -166,15 +147,8 @@
             },
             dataType: "json",
             success: function(response) {
-                console.log("Berhasil:", response);
-
-                $("#toats").prepend(toats(response.message, 'berhasil', 'green'));
-
-                setTimeout(function() {
-                    $("#toats").html('');
-                    window.location.href = "/tentang-kami";
-                }, 3000);
-
+                toastr.success(response.message);
+                window.location.href = "{{ route('beranda') }}";
             },
             error: function(xhr, status, error) {
                 btn.prop("disabled", false);
@@ -184,11 +158,7 @@
                     errorMessage = xhr.responseJSON.message;
                 }
 
-                $("#toats").prepend(toats(errorMessage, 'error', 'red'));
-
-                setTimeout(function() {
-                    $("#toats").html('');
-                }, 3000);
+                toastr.success(errorMessage);
             }
         });
     })

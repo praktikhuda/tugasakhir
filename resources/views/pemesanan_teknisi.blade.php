@@ -302,8 +302,6 @@
         let id = $("#id").val();
         let status = $("#status_mo").val();
         let pilih_tek = $("#pilih_tek").val();
-        console.log(pilih_tek);
-
 
         $.ajax({
             type: "post",

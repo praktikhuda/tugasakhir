@@ -232,7 +232,6 @@
     });
 
     $("#crud-modal").on("change", "#role", function() {
-        // console.log("aku");
         let role = $(this).val();
 
         if (role == 'karyawan') {

@@ -21,7 +21,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/img/apple-icon.png') }}" />
-    <link rel="icon" type="image/png" href="{{ ('assets/img/kooler.png') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/kooler.png') }}" />
     <title>Dashboard Kooler - Servis & Pemasangan AC Profesional</title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -33,7 +33,7 @@
     <!-- Popper -->
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <!-- Main Styling -->
-    <link href="{{ asset('assets/css/soft-ui-dashboard-tailwind.css?v=1.0.5') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/soft-ui-dashboard-tailwind.css') }}" rel="stylesheet" />
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
@@ -78,7 +78,7 @@
 <!-- github button -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <!-- main script file  -->
-<script src="{{ asset('assets/js/soft-ui-dashboard-tailwind.js?v=1.0.5') }}" async></script>
+<script src="{{ asset('assets/js/soft-ui-dashboard-tailwind.js') }}" async></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
@@ -100,8 +100,6 @@
         username: "{{ session('username') }}",
         role: "{{ session('role') }}"
     };
-    console.log(sessionData.role); // cek hasilnya
-    console.log(sessionData.username); // cek hasilnya
 </script>
 @yield('js')
 

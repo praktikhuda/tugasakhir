@@ -5066,7 +5066,7 @@ var FullCalendar = (function (exports) {
         }
         PureComponent.prototype.shouldComponentUpdate = function (nextProps, nextState) {
             if (this.debug) {
-                console.log(getUnequalProps(nextProps, this.props), getUnequalProps(nextState, this.state));
+                // console.log(getUnequalProps(nextProps, this.props), getUnequalProps(nextState, this.state));
             }
             return !compareObjs(this.props, nextProps, this.propEquality) ||
                 !compareObjs(this.state, nextState, this.stateEquality);

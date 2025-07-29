@@ -164,7 +164,6 @@
                 id: id
             },
             success: function(response) {
-                // console.log(response);
                 $("#jenis").val(response.data.jenis)
                 $("#id").val(response.data.id)
 

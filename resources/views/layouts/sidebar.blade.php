@@ -2,7 +2,7 @@
     <div class="h-19.5">
         <i class="absolute top-0 right-0 hidden p-4 opacity-50 cursor-pointer fas fa-times text-slate-400 xl:hidden" sidenav-close></i>
         <a class="flex justify-center items-center px-8 py-6 m-0 text-sm whitespace-nowrap text-slate-700" href="javascript:;" target="_blank">
-            <img class="" src="{{ ('assets/img/kooler.png') }}" alt="" width="30%" />
+            <img class="" src="{{ asset('assets/img/kooler.png') }}" alt="" width="30%" />
             <span class="ml-1 font-semibold transition-all duration-200 ease-nav-brand text-xl">Kooler</span>
         </a>
     </div>
@@ -91,7 +91,7 @@
         <div class="after:opacity-65 after:bg-gradient-to-tl after:from-slate-600 after:to-slate-300 relative flex min-w-0 flex-col items-center break-words rounded-2xl border-0 border-solid border-blue-900 bg-white bg-clip-border shadow-none after:absolute after:top-0 after:bottom-0 after:left-0 after:z-10 after:block after:h-full after:w-full after:rounded-2xl after:content-['']" sidenav-card>
             <div class="mb-7.5 absolute h-full w-full rounded-2xl bg-cover bg-center" style="background-image: url('./assets/img/curved-images/white-curved.jpeg')"></div>
             <div class="relative z-20 flex-auto w-full p-4 text-left text-white">
-                <img class="bg-white rounded p-2 mb-2" src="{{ ('assets/img/kooler.png') }}" alt="" width="40%" />
+                <img class="bg-white rounded p-2 mb-2" src="{{ asset('assets/img/kooler.png') }}" alt="" width="40%" />
                 <div class="transition-all duration-200 ease-nav-brand">
                     <h6 class="mb-0 text-white">Kooler</h6>
                     <p class="mt-0 mb-4 text-xs font-semibold leading-tight">Servis & Pemasangan AC Profesional</p>

@@ -29,6 +29,9 @@ use App\Http\Controllers\UsersController;
 |
 */
 
+Route::get('/modal-detail', function () {
+    return view('landing-page.modal.detail-v1');
+});
 Route::get('/modal/detail-v2', function () {
     return view('landing-page.modal.detail-v2');
 });
@@ -167,9 +170,10 @@ Route::middleware(['guest'])->prefix('auth')->group(
     function () {
         Route::get('/masuk', [AuthController::class, 'index'])->name('auth.masuk');
         Route::get('/daftar', [AuthController::class, 'daftar'])->name('auth.daftar');
+        Route::post('/cek_user', [AuthController::class, 'cek'])->name('cek_user');
         Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
         Route::post('/send_otp', [AuthController::class, 'send_otp'])->name('auth.send_otp');
-
+        
         Route::post('/authenticate', [AuthController::class, 'authenticate'])->name('auth.authenticate');
     }
 );
