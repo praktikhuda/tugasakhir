@@ -127,8 +127,11 @@ class PemesananController extends Controller
             ->leftJoin('pesan_teknisi AS pt', 'karyawan.id', '=', 'pt.id_teknisi')
             ->leftJoin('pesan_sekarangs AS ps', 'pt.id_pesan', '=', 'ps.id')
             ->groupBy('karyawan.id', 'karyawan.nama')
+            ->where('karyawan.is_teknisi', true)
             ->havingRaw('COUNT(CASE WHEN ps.tanggal = ? THEN 1 ELSE NULL END) = 0', [$tanggal])
             ->get();
+
+            
 
         $query = PesanTeknisi::where('id_pesan', $id)
             ->select('nama', 'k.id')
