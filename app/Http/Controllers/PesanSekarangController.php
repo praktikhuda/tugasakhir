@@ -46,7 +46,7 @@ class PesanSekarangController extends Controller
             'id_layanan'     => 'required|string|max:100',
             'catatan'     => 'nullable|string',
         ], $messages);
-        
+
         $validator->after(function ($validator) use ($request) {
             $tanggal = $request->tanggal;
 
@@ -85,7 +85,7 @@ class PesanSekarangController extends Controller
 
         if ($username) {
             $isEmail = filter_var($username, FILTER_VALIDATE_EMAIL);
-    
+
             if ($isEmail) {
                 $id = Pelanggan::where('email', $username)->first();
                 $user = User::leftJoin('pelanggan', 'users.id_pelanggan', '=', 'pelanggan.id')
@@ -97,9 +97,9 @@ class PesanSekarangController extends Controller
                     ->select('users.id_pelanggan')
                     ->first();
             }
-    
+
             // dd($user);
-    
+
             if (!$user) {
                 return response()->json([
                     'status' => 'error',
@@ -107,8 +107,8 @@ class PesanSekarangController extends Controller
                 ]);
             }
         }
-        
-        
+
+
 
         $post = PesanSekarang::create([
             'id_layanan'   => $id_layanan,
@@ -234,14 +234,39 @@ class PesanSekarangController extends Controller
         $end   = Carbon::now()->addMonth()->endOfMonth();
 
         $posts = PesanSekarang::whereBetween('tanggal', [$start, $end])
-            ->whereNotIn('status', ['selesai', 'proses', 'tunggu'])
+            ->whereNotIn('status', ['batal'])
             ->select('tanggal')
             ->get();
+
+
 
         return response()->json([
             'data'    => $posts,
             'success' => true,
             'message' => 'Daftar pesanan berhasil dimuat',
         ]);
+    }
+
+    public function listDetailPesanan(Request $request)
+    {
+        $tanggal = anti_injeksi($request->tanggal);
+        $pesan = PesanSekarang::select('nama', 'lokasi', 'kontak')
+            ->leftJoin('pelanggan', 'pesan_sekarangs.id_pelanggan', '=', 'pelanggan.id')
+            ->where('tanggal', $tanggal)
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'nama' => substr($item->nama, 0, 3) . '***',
+                    'lokasi' => substr($item->lokasi, 0, 3) . '***',
+                    'kontak' => '*****' . substr($item->kontak, -4),
+                ];
+            });
+
+        $data = [
+            'status' => 'success',
+            'data' => $pesan,
+        ];
+
+        return response()->json($data);
     }
 }

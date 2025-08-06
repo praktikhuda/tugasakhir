@@ -55,8 +55,8 @@
 
             <div class="flex items-center justify-center px-4 py-10 bg-white sm:px-6 lg:px-8 sm:py-16 lg:py-24">
                 <div class="">
-                    <h2 class="text-3xl font-bold leading-tight text-black sm:text-4xl text-center">Selamat Datang di ServiceAC</h2>
-                    <p class="mt-2 text-base text-gray-600 text-center mb-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                    <h2 class="text-3xl font-bold leading-tight text-black sm:text-4xl text-center">Selamat Datang di Kooler</h2>
+                    <p class="mt-2 text-base text-gray-600 text-center mb-4">Layanan Panggilan ke Rumah/Kantor - Harga Jujur, Teknisi Berpengalaman</p>
 
                     <div class="space-y-5">
                         <div>
@@ -98,9 +98,9 @@
                                     class="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600" />
                             </div>
                         </div>
-                        <p class="mt-5 text-sm text-gray-600 flex justify-end">
+                        <!-- <p class="mt-5 text-sm text-gray-600 flex justify-end">
                             <a href="#" title="" class="text-blue-600 transition-all duration-200 hover:underline hover:text-blue-700">Lupa kata sandi?</a>
-                        </p>
+                        </p> -->
 
                         <div>
                             <button
@@ -114,6 +114,9 @@
 
                     <p class="mt-5 text-sm text-gray-600 text-center">
                         Belum memiliki akun? <a href="{{ route('auth.daftar') }}" title="" class="text-blue-600 transition-all duration-200 hover:underline hover:text-blue-700">Daftar</a>
+                    </p>
+                    <p class="mt-5 text-sm text-gray-600 text-center">
+                        Kembali ke <a href="{{ route('beranda') }}" title="" class="text-blue-600 transition-all duration-200 hover:underline hover:text-blue-700">Beranda</a>
                     </p>
                 </div>
             </div>

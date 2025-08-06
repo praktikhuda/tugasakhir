@@ -71,6 +71,7 @@ Route::get('/kontak-kami', function () {
 
 
 Route::get('/getpesan', [PesanSekarangController::class, 'listPesanan']);
+Route::post('/listDetailPesanan', [PesanSekarangController::class, 'listDetailPesanan']);
 
 Route::get('/pesan-batal', function () {
     return view("landing-page/pesan-batal");

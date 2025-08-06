@@ -68,7 +68,7 @@
 </div>
 
 <div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden custom-modal fixed inset-0 z-50 flex items-center justify-center w-full h-full bg-black/50" style="z-index: 9999;">
-    <div class="relative p-4 w-full max-w-md max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow-sm">
             <!-- Modal header -->
@@ -305,7 +305,13 @@
     $(document).on("click", "#tambah_jenis", function() {
         bukaModal();
         $("#id").val("");
-        $("#jenis").val("");
+        $("#nama").val("");
+        $("#username").val("");
+        $("#email").val("");
+        $("#alamat").val("");
+        $("#nomor").val("");
+        $("#role").val("karyawan");
+        $("#password").val("");
     })
 
 
@@ -356,7 +362,7 @@
         let showing = '';
         if (data.total_data == 0) {
             html = `<tr>
-            <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent text-center" colspan="7">Data tidak ditemukan</td>
+            <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent text-center" colspan="8">Data tidak ditemukan</td>
             </tr>`;
         } else {
             $.each(data.data, function(i, d) {

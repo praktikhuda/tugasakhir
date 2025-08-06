@@ -29,12 +29,28 @@
 
                 <div>
                     @if(session('role'))
-                    <a href="{{ route('dashboard') }}" title="" class="items-center justify-center hidden px-10 py-2 text-xs uppercase text-gray-900 transition-all duration-200 rounded-md lg:inline-flex bg-yellow-500 hover:bg-yellow-400 font-semibold" role="button"> Dashboard </a>
-                    <a href="{{ route('auth.logout') }}" title="" class="items-center justify-center hidden px-10 py-2 text-xs uppercase text-gray-900 transition-all duration-200 rounded-md lg:inline-flex bg-red-500 hover:bg-red-400 font-semibold" role="button"> Logout </a>
+                    @if(session('role') == 'pelanggan')
+                    <a href="{{ route('dashboard') }}" title="" class="items-center justify-center hidden px-10 py-2 text-xs uppercase text-gray-900 transition-all duration-200 rounded-md lg:inline-flex bg-yellow-500 hover:bg-yellow-400 font-semibold" role="button">
+                        Dashboard
+                    </a>
                     @else
-                    <a href="{{ route('auth.masuk') }}" title="" class="items-center justify-center hidden px-10 py-2 text-xs uppercase text-gray-900 transition-all duration-200 rounded-md lg:inline-flex bg-yellow-500 hover:bg-yellow-400 font-semibold" role="button"> Masuk </a>
-                    <a href="{{ route('auth.daftar') }}" title="" class="items-center justify-center hidden px-10 py-2 text-xs uppercase text-gray-900 transition-all duration-200 rounded-md lg:inline-flex bg-yellow-500 hover:bg-yellow-400 font-semibold ml-2" role="button"> Daftar </a>
+                    <a href="{{ route('viewapp') }}" title="" class="items-center justify-center hidden px-10 py-2 text-xs uppercase text-gray-900 transition-all duration-200 rounded-md lg:inline-flex bg-yellow-500 hover:bg-yellow-400 font-semibold" role="button">
+                        Dashboard
+                    </a>
                     @endif
+
+                    <a href="{{ route('auth.logout') }}" title="" class="items-center justify-center hidden px-10 py-2 text-xs uppercase text-gray-900 transition-all duration-200 rounded-md lg:inline-flex bg-red-500 hover:bg-red-400 font-semibold" role="button">
+                        Logout
+                    </a>
+                    @else
+                    <a href="{{ route('auth.masuk') }}" title="" class="items-center justify-center hidden px-10 py-2 text-xs uppercase text-gray-900 transition-all duration-200 rounded-md lg:inline-flex bg-yellow-500 hover:bg-yellow-400 font-semibold" role="button">
+                        Masuk
+                    </a>
+                    <a href="{{ route('auth.daftar') }}" title="" class="items-center justify-center hidden px-10 py-2 text-xs uppercase text-gray-900 transition-all duration-200 rounded-md lg:inline-flex bg-yellow-500 hover:bg-yellow-400 font-semibold ml-2" role="button">
+                        Daftar
+                    </a>
+                    @endif
+
                 </div>
             </nav>
         </div>
